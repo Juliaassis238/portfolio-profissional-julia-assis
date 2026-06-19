@@ -264,25 +264,7 @@
     .reveal-d2 { transition-delay: .3s; }
     .reveal-d3 { transition-delay: .45s; }
 
-    /* WHATSAPP FLUTUANTE */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      width: 70px;
-      height: 70px;
-      background: #25d366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 999;
-      transition: var(--transition);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-      text-decoration: none;
-      border: 3px solid white;
-    }
+    
     .whatsapp-float:hover {
       background: #1eaa4f;
       transform: scale(1.15);
@@ -465,7 +447,22 @@
     .client-logo-item:hover { border-color: var(--gold); background: rgba(200,160,80,0.05); }
     .client-logo-item img { width: 100%; height: 100%; object-fit: contain; padding: 0.5rem; }
 
-    </style>
+    
+    /* CONFIGURAÇÃO GERAL DE CARROSSEL */
+    .carousel { position: relative; max-width: 1400px; margin: 0 auto; padding: 0 4rem; }
+    .carousel-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 1.5rem 0.5rem; scrollbar-width: none; -ms-overflow-style: none; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track > * { flex: 0 0 clamp(300px, 85vw, 400px); scroll-snap-align: center; }
+    
+    /* AJUSTES ESPECÍFICOS PARA SEÇÕES */
+    .precos-track > *, .metrics-track > *, .servicos-track > *, .sm-track > *, .proc-track > *, .dep-track > * { 
+        flex: 0 0 clamp(320px, 85vw, 420px); 
+    }
+
+    /* GARANTIR QUE ITENS DENTRO DOS CARDS ESTEJAM LADO A LADO QUANDO POSSÍVEL */
+    .metric-row, .preco-item, .social-row { display: flex; justify-content: space-between; align-items: center; }
+
+  </style>
 </head>
 <body>
 
@@ -849,7 +846,11 @@
         <p class="section-label">O Que Ofereço</p>
         <h2 class="section-title reveal">Serviços <em>Completos</em></h2>
       </div>
-      <div class="servicos-grid">
+      
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="servicosTrack">&#8249;</button>
+      <div class="carousel-track servicosTrack-track" id="servicosTrack">
+        
         <div class="servico-card reveal">
           <div class="servico-num">01</div>
           <div class="servico-icon">
@@ -886,7 +887,10 @@
           <p>Estratégias de marketing digital, funis de vendas, copywriting persuasivo e campanhas que geram resultados mensuráveis.</p>
           <div class="servico-tags"><span class="stag">Marketing Digital</span><span class="stag">Copywriting</span><span class="stag">Funil</span></div>
         </div>
+      
       </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="servicosTrack">&#8250;</button>
+    </div>
     </div>
   </section>
 
@@ -897,14 +901,21 @@
         <p class="section-label">Gestão de Redes Sociais</p>
         <h2 class="section-title reveal">Social <em>Media</em> Estratégico</h2>
       </div>
-      <div class="sm-grid">
+      
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="smTrack">&#8249;</button>
+      <div class="carousel-track smTrack-track" id="smTrack">
+        
         <div class="sm-card reveal"><div class="sm-card-num">01</div><h3>Estratégia de Conteúdo</h3><p>Calendário editorial, pauta temática, pesquisa de tendências e criação de conteúdo alinhado à identidade da marca.</p><div class="sm-card-res">+180% de alcance orgânico médio</div></div>
         <div class="sm-card reveal reveal-d1"><div class="sm-card-num">02</div><h3>Criação Visual</h3><p>Design de posts, stories, reels covers e carrosséis. Identidade visual consistente e impactante em cada publicação.</p><div class="sm-card-res">Alta taxa de salvamento e compartilhamento</div></div>
         <div class="sm-card reveal reveal-d2"><div class="sm-card-num">03</div><h3>Crescimento & Engajamento</h3><p>Otimização de perfil, hashtags estratégicos, interação com comunidade e análise de métricas contínua.</p><div class="sm-card-res">Crescimento consistente mês a mês</div></div>
         <div class="sm-card reveal"><div class="sm-card-num">04</div><h3>Campanhas Pagas</h3><p>Gestão de anúncios no Instagram e Facebook Ads com segmentação precisa, testes A/B e otimização de ROI.</p><div class="sm-card-res">ROAS médio de 4x nas campanhas</div></div>
         <div class="sm-card reveal reveal-d1"><div class="sm-card-num">05</div><h3>Copywriting</h3><p>Legendas envolventes, CTAs eficazes e textos que comunicam valor, constroem autoridade e geram ação.</p><div class="sm-card-res">Mais conversões via DM e link na bio</div></div>
         <div class="sm-card reveal reveal-d2"><div class="sm-card-num">06</div><h3>Relatórios & Análises</h3><p>Relatórios mensais completos com métricas, insights estratégicos e recomendações para evolução dos resultados.</p><div class="sm-card-res">Decisões baseadas em dados reais</div></div>
+      
       </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="smTrack">&#8250;</button>
+    </div>
     </div>
   </section>
 
@@ -916,8 +927,15 @@
         <h2 class="section-title reveal">Meu <em>Processo</em> Criativo</h2>
       </div>
       <div class="proc-wrap">
-        <div class="proc-steps">
-          <div class="proc-step reveal"><div class="ps-num">01</div><div class="ps-c"><h4>Descoberta & Briefing</h4><p>Ouço seus objetivos, público-alvo e referências para entender a essência do projeto antes de começar.</p></div></div>
+        
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="procTrack">&#8249;</button>
+      <div class="carousel-track procTrack-track" id="procTrack">
+        
+          <div class="proc-step reveal"><div class="ps-num">01
+      </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="procTrack">&#8250;</button>
+    </div><div class="ps-c"><h4>Descoberta & Briefing</h4><p>Ouço seus objetivos, público-alvo e referências para entender a essência do projeto antes de começar.</p></div></div>
           <div class="proc-step reveal reveal-d1"><div class="ps-num">02</div><div class="ps-c"><h4>Pesquisa & Estratégia</h4><p>Analiso mercado, concorrentes e tendências para embasar decisões criativas com inteligência estratégica.</p></div></div>
           <div class="proc-step reveal reveal-d2"><div class="ps-num">03</div><div class="ps-c"><h4>Criação & Desenvolvimento</h4><p>Executo com atenção obsessiva a detalhes visuais, tipografia, cores e experiência do usuário.</p></div></div>
           <div class="proc-step reveal reveal-d3"><div class="ps-num">04</div><div class="ps-c"><h4>Revisão & Refinamento</h4><p>Apresento, coletamos feedback e refino até a perfeição. Sua satisfação é o padrão inegociável.</p></div></div>
@@ -936,7 +954,7 @@
       <p class="section-label">O Que Dizem</p>
       <h2 class="section-title reveal">Clientes <em>Satisfeitos</em></h2>
     </div>
-    <div class="dep-grid" style="max-width:1400px; margin:0 auto; padding: 0 5rem 7rem;">
+    <div class="dep-grid" style="max-width:1400px; margin:0 auto; padding: 0 1.5rem 4rem;">
       <div class="dep-card reveal">
         <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
         <p class="dep-text">"A Júlia transformou completamente minha presença digital. O site ficou incrível, profissional e gerou resultados desde o primeiro mês. Recomendo demais!"</p>
@@ -1088,7 +1106,11 @@
             <div class="cinfo-item"><div class="cinfo-item-text"><strong>Área de Atuação</strong><span>Marketing · Web Design · Design Gráfico · Social Media</span></div></div>
             <div class="cinfo-item"><div class="cinfo-item-text"><strong>Disponibilidade</strong><span>Freelance & Projetos — Segunda a Sexta</span></div></div>
             <div class="cinfo-item"><div class="cinfo-item-text"><strong>Resposta</strong><span>Em até 24 horas úteis</span></div></div>
+          
+          <div style="margin-top: 3rem;">
+            <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="btn-gold" style="display: inline-block; width: 100%; text-align: center; padding: 1.5rem; font-size: 1rem;">ENTRAR EM CONTATO AGORA</a>
           </div>
+</div>
         </div>
 
       </div>
@@ -1178,13 +1200,7 @@
       });
     });
   </script>
-  <!-- WHATSAPP FLUTUANTE -->
-  <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="whatsapp-float" title="Enviar mensagem via WhatsApp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
-      <path d="M17.507 14.307l-.009.075c-1.7.995-2.986 1.289-4.385.96-.795-.2-1.312-.535-1.719-1.155-.273-.403-.633-.696-1.164-.779-.531-.083-1.308.057-1.633.808-.325.751.197 1.948 1.509 3.222 1.312 1.274 3.056 2.036 4.588 2.19 1.532.154 2.953-.31 3.932-1.295.979-.985 1.514-2.41 1.514-3.835 0-1.425-.535-2.85-1.514-3.835-.979-.985-2.4-1.449-3.932-1.295-1.532.154-3.276.916-4.588 2.19-1.312 1.274-1.834 2.471-1.509 3.222.325.751 1.102.891 1.633.808.531-.083.891-.376 1.164-.779.407-.62.924-.955 1.719-1.155 1.399-.329 2.685-.035 4.385.96l.009.075c.05.376.05.752 0 1.128z"/>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-    </svg>
-  </a>
+  
 
   </body>
 </html>
