@@ -138,24 +138,49 @@
       position: absolute; 
       top: 50%; 
       transform: translateY(-50%); 
-      z-index: 10; 
-      width: 52px; 
-      height: 52px; 
+      z-index: 100; 
+      width: 60px; 
+      height: 60px; 
       border-radius: 50%; 
-      background: rgba(10,9,8,0.85); 
-      border: 1px solid var(--gold); 
-      color: var(--gold); 
-      font-size: 1.7rem; 
+      background: var(--gold); 
+      border: 2px solid var(--white); 
+      color: var(--black); 
+      font-size: 2rem; 
+      font-weight: bold;
       line-height: 1; 
       display: flex; 
       align-items: center; 
       justify-content: center; 
       cursor: pointer; 
-      transition: var(--transition); 
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      box-shadow: 0 0 20px rgba(200, 160, 80, 0.4), 0 0 40px rgba(0, 0, 0, 0.6);
     }
-    .carousel-arrow:hover { background: var(--gold); color: var(--black); }
-    .carousel-arrow.prev { left: 0; }
-    .carousel-arrow.next { right: 0; }
+    .carousel-arrow:hover { 
+      background: var(--white); 
+      color: var(--gold); 
+      transform: translateY(-50%) scale(1.15);
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+    .carousel-arrow.prev { left: -30px; }
+    .carousel-arrow.next { right: -30px; }
+    
+    /* Indicador de scroll para mobile */
+    .carousel-mobile-hint {
+      display: none;
+      text-align: center;
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      animation: pulseHint 2s infinite;
+    }
+    @keyframes pulseHint {
+      0% { opacity: 0.4; transform: translateX(-5px); }
+      50% { opacity: 1; transform: translateX(5px); }
+      100% { opacity: 0.4; transform: translateX(-5px); }
+    }
     .carousel-hint { max-width: 1400px; margin: 0 auto 1.5rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
 
     /* WEB DESIGNER */
@@ -296,7 +321,18 @@
       .section-wrap { padding: 5rem 1.5rem; }
       .web-header, .dg-header, .proc-header, .dep-header, .servicos-header { padding: 0 1.5rem; }
       .carousel-wrapper { padding: 0 1.5rem; }
-      .carousel-arrow { display: none; }
+      .carousel-arrow { 
+        width: 45px; 
+        height: 45px; 
+        font-size: 1.4rem; 
+        left: 5px; 
+        right: 5px;
+        opacity: 0.9;
+        border-width: 1px;
+      }
+      .carousel-arrow.prev { left: 5px; }
+      .carousel-arrow.next { right: 5px; }
+      .carousel-mobile-hint { display: block; }
       #contato { padding: 5rem 1.5rem; }
       footer { padding: 4rem 1.5rem 2rem; }
     }
@@ -522,6 +558,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="webTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
@@ -572,6 +609,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="dgTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
@@ -638,6 +676,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="precosTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
 
     <!-- MÉTRICAS SOCIAIS -->
@@ -737,6 +776,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="metricsTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
@@ -756,6 +796,7 @@
         <div class="proc-step reveal"><div class="ps-num">05</div><div class="ps-c"><h4>Entrega & Suporte</h4><p>Entrego arquivos organizados e ofereço suporte pós-entrega.</p></div></div>
       </div>
       <button class="carousel-arrow next" data-carousel="procTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
@@ -794,6 +835,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="depTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
@@ -836,6 +878,7 @@
         </div>
       </div>
       <button class="carousel-arrow next" data-carousel="servicosTrack">&#8250;</button>
+      <div class="carousel-mobile-hint">Deslize para ver mais &rarr;</div>
     </div>
   </section>
 
