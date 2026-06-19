@@ -167,6 +167,22 @@
     .dg-label { font-family:var(--font-serif); font-style:italic; font-size:0.95rem; color:var(--white); opacity:0; transform:translateY(8px); transition:var(--transition); }
     .dg-item:hover .dg-label { opacity:1; transform:translateY(0); }
 
+    /* CARROSSEL */
+    .carousel { position: relative; max-width: 1400px; margin: 0 auto; padding: 0 4rem; }
+    .carousel-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 0.5rem 0.25rem 1.5rem; scrollbar-width: none; -ms-overflow-style: none; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track > * { flex: 0 0 clamp(290px, 82vw, 400px); scroll-snap-align: center; }
+    .carousel-track .reveal { opacity: 1 !important; transform: none !important; }
+    .web-track .web-card.featured .web-card-img { aspect-ratio: 16/10; }
+    .dg-track > * { flex: 0 0 clamp(260px, 78vw, 360px); }
+    .dg-track .dg-item { height: 420px; }
+    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; width: 52px; height: 52px; border-radius: 50%; background: rgba(10,9,8,0.85); border: 1px solid var(--gold); color: var(--gold); font-size: 1.7rem; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+    .carousel-arrow:hover { background: var(--gold); color: var(--black); }
+    .carousel-arrow.prev { left: 0; }
+    .carousel-arrow.next { right: 0; }
+    .carousel-hint { max-width: 1400px; margin: 0 auto 1.5rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+    @media (max-width: 768px) { .carousel { padding: 0 1rem; } .carousel-arrow { width: 42px; height: 42px; font-size: 1.4rem; } }
+
     /* SOCIAL MEDIA */
     #socialmedia { background: var(--dark); padding: 7rem 5rem; }
     .sm-header { max-width: 1400px; margin: 0 auto 4rem; }
@@ -469,7 +485,10 @@
       <p class="section-label">Projetos de Web Design</p>
       <h2 class="section-title reveal">Sites <em>Premium</em> Desenvolvidos</h2>
     </div>
-    <div class="web-projects-grid">
+    <p class="carousel-hint">Clique nas setas para ver mais projetos &rarr;</p>
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="webTrack">&#8249;</button>
+      <div class="carousel-track web-track" id="webTrack">
       <div class="web-card featured reveal">
         <img class="web-card-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=85" alt="Maison Belle Studio" />
         <div class="web-card-overlay">
@@ -560,6 +579,8 @@
         </div>
         <div class="web-card-hover"><a href="https://juliaassis238.github.io/horizon-legal-society/" target="_blank" class="web-card-link">Ver Projeto</a></div>
       </div>
+      </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="webTrack">&#8250;</button>
     </div>
   </section>
 
@@ -571,7 +592,10 @@
         <h2 class="section-title reveal">Artes & <em>Edições</em> Personalizadas</h2>
       </div>
     </div>
-    <div class="dg-grid" style="max-width:1400px; margin: 0 auto;">
+    <p class="carousel-hint">Clique nas setas para ver mais artes &rarr;</p>
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="dgTrack">&#8249;</button>
+      <div class="carousel-track dg-track" id="dgTrack">
       <!-- Imagem 1: Logos Artemyse (tall) -->
       <div class="dg-item tall reveal">
         <img class="dg-img" src="dg1_logos-artemyse_coluna-esquerda-alta.png" alt="Identidade Visual Artemyse" />
@@ -617,6 +641,8 @@
         <img class="dg-img" src="dg9_fashion-verde_final-larga.png" alt="Design Personalizado Fashion" />
         <div class="dg-overlay"><span class="dg-label">Design Personalizado — Criação de Artes</span></div>
       </div>
+      </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="dgTrack">&#8250;</button>
     </div>
   </section>
 
@@ -1054,6 +1080,18 @@
       let current = '';
       sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
       navLinks.forEach(a => { a.style.color = ''; if (a.getAttribute('href') === '#' + current) a.style.color = 'var(--gold)'; });
+    });
+
+    // Carrosséis (setas)
+    document.querySelectorAll('.carousel-arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const track = document.getElementById(btn.dataset.carousel);
+        if (!track) return;
+        const card = track.querySelector('*');
+        const step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+        const dir = btn.classList.contains('next') ? 1 : -1;
+        track.scrollBy({ left: step * dir, behavior: 'smooth' });
+      });
     });
   </script>
 </body>
