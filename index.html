@@ -430,7 +430,42 @@
       .dep-grid { grid-template-columns: 1fr; }
       .social-grid { grid-template-columns: 1fr; }
     }
-  </style>
+  
+    /* CARROSSEL DE PREÇOS */
+    .precos-track > * { flex: 0 0 clamp(300px, 80vw, 400px); }
+    .preco-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2rem; transition: var(--transition); }
+    .preco-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .preco-card h3 { font-family: var(--font-serif); font-size: 1.2rem; color: var(--white); margin-bottom: 1rem; }
+    .preco-items { display: flex; flex-direction: column; gap: 0.8rem; }
+    .preco-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--gold-border); }
+    .preco-item span:last-child { color: var(--gold); font-weight: 600; }
+
+    /* CARROSSEL DE MÉTRICAS */
+    .metrics-track > * { flex: 0 0 clamp(280px, 75vw, 380px); }
+    .metric-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2rem; transition: var(--transition); }
+    .metric-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .metric-card h3 { font-family: var(--font-serif); font-size: 1.1rem; color: var(--white); margin-bottom: 0.3rem; }
+    .metric-card p { font-size: 0.75rem; color: var(--gray); margin-bottom: 1rem; }
+    .metric-items { display: flex; flex-direction: column; gap: 0.6rem; }
+    .metric-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--gold-border); }
+    .metric-row span:last-child { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+
+    /* PROVAS SOCIAIS */
+    #provas-sociais { background: var(--black); padding: 7rem 5rem; }
+    .provas-grid { max-width: 1400px; margin: 0 auto 4rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .prova-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2.5rem; transition: var(--transition); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .prova-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(200,160,80,0.15); }
+    .prova-stat { font-family: var(--font-display); font-size: 2.8rem; color: var(--gold); line-height: 1; margin-bottom: 0.5rem; }
+    .prova-label { font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-light); margin-bottom: 0.5rem; }
+    .prova-desc { font-size: 0.75rem; color: var(--gray); line-height: 1.6; }
+    .provas-clients { max-width: 1400px; margin: 0 auto; padding-top: 4rem; border-top: 1px solid var(--gold-border); }
+    .clients-title { font-family: var(--font-serif); font-style: italic; font-size: 1rem; color: var(--gray-light); text-align: center; margin-bottom: 2rem; letter-spacing: 0.1em; }
+    .clients-logos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2rem; align-items: center; justify-items: center; }
+    .client-logo-item { width: 100%; max-width: 140px; height: 60px; background: var(--dark); border: 1px solid var(--gold-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: var(--transition); overflow: hidden; }
+    .client-logo-item:hover { border-color: var(--gold); background: rgba(200,160,80,0.05); }
+    .client-logo-item img { width: 100%; height: 100%; object-fit: contain; padding: 0.5rem; }
+
+    </style>
 </head>
 <body>
 
@@ -712,210 +747,102 @@
         <p class="section-label">Investimento</p>
         <h2 class="section-title">Tabela de <em>Preços</em></h2>
       </div>
-      <div class="cat-block">
-        <div class="cat-header">
-          <span class="cat-number">01</span>
-          <h3 class="cat-title">Web & Identidade</h3>
-        </div>
-        <div class="cat-items">
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Criação de Sites Profissionais</span><span class="cat-price">R$ 400</span></div>
-            <div class="cat-desc">Site completo e responsivo com até 5 páginas (Home, Sobre, Serviços, Portfólio e Contato), domínio configurado, formulário de contato e integração com redes sociais.</div>
+      <div class="carousel">
+        <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="precosTrack">&#8249;</button>
+        <div class="carousel-track precos-track" id="precosTrack">
+          <div class="preco-card reveal">
+            <h3>Web & Identidade</h3>
+            <div class="preco-items">
+              <div class="preco-item"><span>Criação de Sites</span><span>R$ 400</span></div>
+              <div class="preco-item"><span>Portfólios Digitais</span><span>R$ 300</span></div>
+              <div class="preco-item"><span>Currículos Premium</span><span>R$ 75</span></div>
+              <div class="preco-item"><span>Logotipos</span><span>R$ 150</span></div>
+            </div>
           </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Criação de Portfólios Digitais</span><span class="cat-price">R$ 300</span></div>
-            <div class="cat-desc">Portfólio online personalizado para exibir seus trabalhos com galeria de imagens, seção sobre você, área de contato e link pronto para compartilhar.</div>
+          <div class="preco-card reveal reveal-d1">
+            <h3>Dados & Gestão</h3>
+            <div class="preco-items">
+              <div class="preco-item"><span>Planilhas Personalizadas</span><span>R$ 130</span></div>
+              <div class="preco-item"><span>Controle Financeiro</span><span>R$ 150</span></div>
+              <div class="preco-item"><span>Dashboards</span><span>R$ 280</span></div>
+            </div>
           </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Currículos Profissionais Premium</span><span class="cat-price">R$ 75</span></div>
-            <div class="cat-desc">Currículo em PDF com design premium, formatação elegante, foto profissional incluída e versão pronta para envio por e-mail ou WhatsApp.</div>
+          <div class="preco-card reveal reveal-d2">
+            <h3>Criação Visual</h3>
+            <div class="preco-items">
+              <div class="preco-item"><span>Imagens com IA</span><span>R$ 80</span></div>
+              <div class="preco-item"><span>Edição de Fotos</span><span>R$ 50</span></div>
+              <div class="preco-item"><span>Artes para Redes</span><span>R$ 50</span></div>
+            </div>
           </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Criação de Logotipos</span><span class="cat-price">R$ 150</span></div>
-            <div class="cat-desc">Logotipo original criado do zero com até 3 propostas de conceito, arquivo final em PNG, SVG e PDF, versão colorida e em preto e branco.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Cartão de Visita Digital</span><span class="cat-price">R$ 80</span></div>
-            <div class="cat-desc">Cartão de visita digital interativo com seus dados, link para WhatsApp, redes sociais e portfólio — compartilhável por link ou QR Code.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Assinatura Profissional para E-mail</span><span class="cat-price">R$ 80</span></div>
-            <div class="cat-desc">Assinatura formatada com nome, cargo, contatos, logo e links das redes sociais — pronta para inserir no Gmail, Outlook ou qualquer outro cliente de e-mail.</div>
-          </div>
-        </div>
-      </div>
-      <div class="cat-block">
-        <div class="cat-header">
-          <span class="cat-number">02</span>
-          <h3 class="cat-title">Dados & Gestão</h3>
-        </div>
-        <div class="cat-items">
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Planilhas Personalizadas</span><span class="cat-price">R$ 130</span></div>
-            <div class="cat-desc">Planilha no Excel ou Google Sheets desenvolvida conforme sua necessidade, com fórmulas automáticas, formatação profissional e instruções de uso.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Planilhas de Controle Financeiro</span><span class="cat-price">R$ 150</span></div>
-            <div class="cat-desc">Planilha de controle de entradas e saídas, com dashboard de resumo mensal, gráficos automáticos e categorização de despesas.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Dashboards e Relatórios</span><span class="cat-price">R$ 280</span></div>
-            <div class="cat-desc">Painel visual de dados personalizado com gráficos, indicadores e tabelas — ideal para apresentar resultados de forma clara e profissional.</div>
+          <div class="preco-card reveal reveal-d3">
+            <h3>Conteúdo & Documentos</h3>
+            <div class="preco-items">
+              <div class="preco-item"><span>Catálogos Digitais</span><span>R$ 200</span></div>
+              <div class="preco-item"><span>Apresentações</span><span>R$ 230</span></div>
+              <div class="preco-item"><span>E-books</span><span>R$ 200</span></div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="cat-block">
-        <div class="cat-header">
-          <span class="cat-number">03</span>
-          <h3 class="cat-title">Criação Visual</h3>
-        </div>
-        <div class="cat-items">
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Criação de Imagens com IA</span><span class="cat-price">R$ 80</span></div>
-            <div class="cat-desc">Criação de até 5 imagens exclusivas geradas com inteligência artificial, com base no seu briefing, em alta resolução prontas para uso digital ou impresso.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Edição e Melhoria de Fotos</span><span class="cat-price">R$ 50</span></div>
-            <div class="cat-desc">Edição profissional de até 5 fotos: remoção de fundo, correção de cores, ajuste de iluminação e retoque — entregues em alta resolução.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Artes para Redes Sociais</span><span class="cat-price">R$ 50</span></div>
-            <div class="cat-desc">Pack com até 5 artes personalizadas para Instagram, Facebook ou WhatsApp — posts, stories ou capas — no seu estilo e identidade visual.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Certificados Personalizados</span><span class="cat-price">R$ 80</span></div>
-            <div class="cat-desc">Template de certificado com identidade visual da sua marca, campos editáveis e arquivo em PDF pronto para emissão e envio.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Convites Digitais</span><span class="cat-price">R$ 95</span></div>
-            <div class="cat-desc">Convite digital animado ou estático em formato de imagem ou link interativo, personalizado com tema, cores e dados do evento.</div>
-          </div>
-        </div>
-      </div>
-      <div class="cat-block">
-        <div class="cat-header">
-          <span class="cat-number">04</span>
-          <h3 class="cat-title">Conteúdo & Documentos</h3>
-        </div>
-        <div class="cat-items">
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Catálogos Digitais</span><span class="cat-price">R$ 200</span></div>
-            <div class="cat-desc">Catálogo em PDF ou formato digital com fotos dos produtos, descrições, preços e identidade visual da marca — até 10 produtos inclusos.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Catálogo para WhatsApp Business</span><span class="cat-price">R$ 220</span></div>
-            <div class="cat-desc">Cadastro e organização completa do catálogo no WhatsApp Business com fotos, descrições, preços e categorias — até 15 produtos.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Cardápios Digitais</span><span class="cat-price">R$ 180</span></div>
-            <div class="cat-desc">Cardápio digital elegante em PDF ou link online, com fotos dos itens, preços, categorias e QR Code para acesso fácil pelos clientes.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Apresentações Profissionais</span><span class="cat-price">R$ 230</span></div>
-            <div class="cat-desc">Apresentação em PowerPoint ou Google Slides com até 15 slides, design premium, ícones, gráficos e estrutura narrativa para impactar.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">E-books Personalizados</span><span class="cat-price">R$ 200</span></div>
-            <div class="cat-desc">E-book formatado com capa, miolo diagramado, tipografia profissional e exportação em PDF — ideal para infoprodutos, guias ou portfólios.</div>
-          </div>
-          <div class="cat-item" onclick="this.classList.toggle('open')">
-            <div class="cat-item-top"><span class="cat-name">Documentos e Formulários Personalizados</span><span class="cat-price">R$ 150</span></div>
-            <div class="cat-desc">Criação de contratos, propostas, formulários ou qualquer documento profissional com identidade visual da sua marca, em PDF editável.</div>
-          </div>
-        </div>
-      </div>
-      
-      
-      <div class="section-header" style="margin-top: 5rem;">
-        <p class="section-label">Gestão de Engajamento</p>
-        <h2 class="section-title">Métricas <em>Sociais</em></h2>
-      </div>
-      <div class="social-grid">
-        <!-- Seguidores Mundiais -->
-        <div class="social-card">
-          <h3 class="social-card-title">Seguidores Mundiais</h3>
-          <span class="social-card-sub">Instagram Global</span>
-          <div class="social-rows">
-            <div class="social-row"><span>200</span><span>R$ 9,50</span></div>
-            <div class="social-row"><span>500</span><span>R$ 16,00</span></div>
-            <div class="social-row"><span>700</span><span>R$ 19,50</span></div>
-            <div class="social-row"><span>1.000</span><span>R$ 29,00</span></div>
-            <div class="social-row"><span>2.000</span><span>R$ 55,00</span></div>
-            <div class="social-row"><span>3.000</span><span>R$ 65,00</span></div>
-            <div class="social-row"><span>4.000</span><span>R$ 75,00</span></div>
-            <div class="social-row"><span>5.000</span><span>R$ 89,00</span></div>
-            <div class="social-row"><span>10.000</span><span>R$ 163,00</span></div>
-          </div>
-        </div>
-        <!-- Seguidores Brasileiros -->
-        <div class="social-card">
-          <h3 class="social-card-title">Seguidores Brasileiros</h3>
-          <span class="social-card-sub">Perfis Nacionais 🇧🇷</span>
-          <div class="social-rows">
-            <div class="social-row"><span>100</span><span>R$ 9,00</span></div>
-            <div class="social-row"><span>200</span><span>R$ 15,00</span></div>
-            <div class="social-row"><span>500</span><span>R$ 32,00</span></div>
-            <div class="social-row"><span>1.000</span><span>R$ 64,00</span></div>
-          </div>
-        </div>
-        <!-- Curtidas Brasileiras -->
-        <div class="social-card">
-          <h3 class="social-card-title">Curtidas Brasileiras</h3>
-          <span class="social-card-sub">Engajamento Nacional</span>
-          <div class="social-rows">
-            <div class="social-row"><span>500</span><span>R$ 15,00</span></div>
-            <div class="social-row"><span>1.000</span><span>R$ 26,00</span></div>
-          </div>
-        </div>
-        <!-- Curtidas Mundiais -->
-        <div class="social-card">
-          <h3 class="social-card-title">Curtidas Mundiais</h3>
-          <span class="social-card-sub">Engajamento Global</span>
-          <div class="social-rows">
-            <div class="social-row"><span>1.000</span><span>R$ 13,00</span></div>
-            <div class="social-row"><span>10.000</span><span>R$ 38,00</span></div>
-            <div class="social-row"><span>20.000</span><span>R$ 53,00</span></div>
-            <div class="social-row"><span>50.000</span><span>R$ 78,00</span></div>
-          </div>
-        </div>
-        <!-- Visualizações Instagram (Reels) -->
-        <div class="social-card">
-          <h3 class="social-card-title">Visualizações Instagram</h3>
-          <span class="social-card-sub">Reels</span>
-          <div class="social-rows">
-            <div class="social-row"><span>2.000</span><span>R$ 8,00</span></div>
-            <div class="social-row"><span>5.000</span><span>R$ 13,00</span></div>
-            <div class="social-row"><span>10.000</span><span>R$ 25,00</span></div>
-            <div class="social-row"><span>20.000</span><span>R$ 35,00</span></div>
-            <div class="social-row"><span>50.000</span><span>R$ 55,00</span></div>
-          </div>
-        </div>
-        <!-- Alcance de Métricas -->
-        <div class="social-card">
-          <h3 class="social-card-title">Alcance de Métricas</h3>
-          <span class="social-card-sub">Visibilidade</span>
-          <div class="social-rows">
-            <div class="social-row"><span>2.000</span><span>R$ 10,00</span></div>
-            <div class="social-row"><span>5.000</span><span>R$ 20,00</span></div>
-            <div class="social-row"><span>10.000</span><span>R$ 30,00</span></div>
-          </div>
-        </div>
-        <!-- Comentários Brasileiros -->
-        <div class="social-card">
-          <h3 class="social-card-title">Comentários Brasileiros</h3>
-          <span class="social-card-sub">Perfis Reais 🇧🇷</span>
-          <div class="social-rows">
-            <div class="social-row"><span>30</span><span>R$ 27,00</span></div>
-            <div class="social-row"><span>50</span><span>R$ 47,00</span></div>
-            <div class="social-row"><span>70</span><span>R$ 60,00</span></div>
-            <div class="social-row"><span>100</span><span>R$ 75,00</span></div>
-          </div>
-        </div>
+        <button class="carousel-arrow next" aria-label="Próximo" data-carousel="precosTrack">&#8250;</button>
       </div>
     </div>
   </section>
 
-  <!-- SERVIÇOS -->
+  <!-- MÉTRICAS SOCIAIS -->
+  <section id="metricas-sociais">
+    <div class="section-wrap">
+      <div class="section-header">
+        <p class="section-label">Gestão de Engajamento</p>
+        <h2 class="section-title">Métricas <em>Sociais</em></h2>
+      </div>
+      <div class="carousel">
+        <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="metricsTrack">&#8249;</button>
+        <div class="carousel-track metrics-track" id="metricsTrack">
+          <div class="metric-card reveal">
+            <h3>Seguidores Mundiais</h3>
+            <p>Instagram Global</p>
+            <div class="metric-items">
+              <div class="metric-row"><span>200</span><span>R$ 9,50</span></div>
+              <div class="metric-row"><span>500</span><span>R$ 16,00</span></div>
+              <div class="metric-row"><span>1.000</span><span>R$ 29,00</span></div>
+              <div class="metric-row"><span>5.000</span><span>R$ 89,00</span></div>
+            </div>
+          </div>
+          <div class="metric-card reveal reveal-d1">
+            <h3>Seguidores Brasileiros</h3>
+            <p>Perfis Nacionais</p>
+            <div class="metric-items">
+              <div class="metric-row"><span>100</span><span>R$ 9,00</span></div>
+              <div class="metric-row"><span>200</span><span>R$ 15,00</span></div>
+              <div class="metric-row"><span>500</span><span>R$ 32,00</span></div>
+              <div class="metric-row"><span>1.000</span><span>R$ 64,00</span></div>
+            </div>
+          </div>
+          <div class="metric-card reveal reveal-d2">
+            <h3>Curtidas Brasileiras</h3>
+            <p>Engajamento Nacional</p>
+            <div class="metric-items">
+              <div class="metric-row"><span>500</span><span>R$ 15,00</span></div>
+              <div class="metric-row"><span>1.000</span><span>R$ 26,00</span></div>
+            </div>
+          </div>
+          <div class="metric-card reveal reveal-d3">
+            <h3>Curtidas Mundiais</h3>
+            <p>Engajamento Global</p>
+            <div class="metric-items">
+              <div class="metric-row"><span>1.000</span><span>R$ 13,00</span></div>
+              <div class="metric-row"><span>10.000</span><span>R$ 38,00</span></div>
+              <div class="metric-row"><span>50.000</span><span>R$ 78,00</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-arrow next" aria-label="Próximo" data-carousel="metricsTrack">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+<!-- SERVIÇOS -->
   <section id="servicos">
     <div class="section-wrap">
       <div class="section-header">
@@ -1092,6 +1019,62 @@
     </div>
   </section>
 
+
+  <!-- PROVAS SOCIAIS -->
+  <section id="provas-sociais">
+    <div class="section-wrap">
+      <div class="section-header">
+        <p class="section-label">Resultados Comprovados</p>
+        <h2 class="section-title">Provas <em>Sociais</em> de Sucesso</h2>
+      </div>
+      <div class="provas-grid">
+        <div class="prova-card reveal">
+          <div class="prova-stat">150+</div>
+          <div class="prova-label">Projetos Entregues</div>
+          <div class="prova-desc">Websites, designs e campanhas com sucesso comprovado</div>
+        </div>
+        <div class="prova-card reveal reveal-d1">
+          <div class="prova-stat">98%</div>
+          <div class="prova-label">Taxa de Satisfação</div>
+          <div class="prova-desc">Clientes satisfeitos que recomendam nossos serviços</div>
+        </div>
+        <div class="prova-card reveal reveal-d2">
+          <div class="prova-stat">300%</div>
+          <div class="prova-label">Crescimento Médio</div>
+          <div class="prova-desc">Aumento de seguidores em contas gerenciadas</div>
+        </div>
+        <div class="prova-card reveal reveal-d3">
+          <div class="prova-stat">5 Anos</div>
+          <div class="prova-label">Experiência</div>
+          <div class="prova-desc">Atuação profissional em design e marketing digital</div>
+        </div>
+      </div>
+      <div class="provas-clients">
+        <p class="clients-title">Empresas e Marcas que Confiam em Nosso Trabalho</p>
+        <div class="clients-logos">
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Artemyse" alt="Artemyse Design">
+          </div>
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Word+Tech" alt="Word Tecnologia">
+          </div>
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Maison+Belle" alt="Maison Belle">
+          </div>
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Prime+Athletics" alt="Prime Athletics">
+          </div>
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Sweet+Lab" alt="Sweet Lab">
+          </div>
+          <div class="client-logo-item">
+            <img src="https://via.placeholder.com/140x60/1a1a1a/c8a050?text=Aurora+Maison" alt="Aurora Maison">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTATO -->
   <section id="contato">
     <div style="padding: 7rem 5rem; max-width: 1400px; margin: 0 auto;">
@@ -1197,8 +1180,9 @@
   </script>
   <!-- WHATSAPP FLUTUANTE -->
   <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="whatsapp-float" title="Enviar mensagem via WhatsApp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004c-1.052 0-2.082.398-2.847 1.12-.735.71-1.14 1.656-1.14 2.655 0 1.859 1.514 3.373 3.375 3.373 1.859 0 3.374-1.514 3.374-3.373 0-.999-.405-1.945-1.14-2.655-.766-.722-1.796-1.12-2.848-1.12m6.604-3.976c-1.466 1.466-3.807 2.534-6.269 2.534-1.034 0-2.047-.198-3.015-.584-2.584-1.017-4.863-3.296-5.88-5.88C.982 2.047.784 1.034.784 0c0-2.462 1.068-4.804 2.534-6.269C4.784-6.735 7.126-7.803 9.588-7.803c1.034 0 2.047.198 3.015.584 2.584 1.017 4.863 3.296 5.88 5.88.386.968.584 1.981.584 3.015 0 2.462-1.068 4.804-2.534 6.269"/>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white">
+      <path d="M17.507 14.307l-.009.075c-1.7.995-2.986 1.289-4.385.96-.795-.2-1.312-.535-1.719-1.155-.273-.403-.633-.696-1.164-.779-.531-.083-1.308.057-1.633.808-.325.751.197 1.948 1.509 3.222 1.312 1.274 3.056 2.036 4.588 2.19 1.532.154 2.953-.31 3.932-1.295.979-.985 1.514-2.41 1.514-3.835 0-1.425-.535-2.85-1.514-3.835-.979-.985-2.4-1.449-3.932-1.295-1.532.154-3.276.916-4.588 2.19-1.312 1.274-1.834 2.471-1.509 3.222.325.751 1.102.891 1.633.808.531-.083.891-.376 1.164-.779.407-.62.924-.955 1.719-1.155 1.399-.329 2.685-.035 4.385.96l.009.075c.05.376.05.752 0 1.128z"/>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
     </svg>
   </a>
 
