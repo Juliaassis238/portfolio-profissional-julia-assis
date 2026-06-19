@@ -413,8 +413,56 @@
       .social-grid { grid-template-columns: 1fr; }
     }
   
-    /* SISTEMA DE CARROSSEL COM SETAS */
-    .carousel-wrapper { position: relative; width: 100%; padding: 0 40px; }
+    
+    /* REFINAMENTO CARROSSEL RESPONSIVO */
+    .carousel-wrapper { position: relative; width: 100%; padding: 0 45px; margin: 20px 0; }
+    .carousel-track { 
+        display: flex; 
+        gap: 20px; 
+        overflow-x: auto; 
+        scroll-behavior: smooth; 
+        scroll-snap-type: x mandatory; 
+        padding: 15px 5px; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch; /* Suavidade no iOS */
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track > * { 
+        flex: 0 0 clamp(280px, 85vw, 400px); 
+        scroll-snap-align: center; 
+        height: auto;
+    }
+    .carousel-arrow { 
+        position: absolute; 
+        top: 50%; 
+        transform: translateY(-50%); 
+        background: var(--gold); 
+        color: var(--black); 
+        border: none; 
+        width: 42px; 
+        height: 42px; 
+        border-radius: 50%; 
+        cursor: pointer; 
+        z-index: 100; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 22px; 
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .carousel-arrow:hover { background: var(--gold-light); transform: translateY(-50%) scale(1.1); }
+    .carousel-arrow.prev { left: 0; }
+    .carousel-arrow.next { right: 0; }
+    
+    @media (max-width: 768px) { 
+        .carousel-wrapper { padding: 0; } 
+        .carousel-arrow { display: none; } 
+        .carousel-track { padding: 0 15px; gap: 15px; }
+        .carousel-track > * { flex: 0 0 85vw; }
+    }
+
     .carousel-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 20px 0; scrollbar-width: none; -ms-overflow-style: none; }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track > * { flex: 0 0 clamp(300px, 85vw, 400px); scroll-snap-align: center; }
@@ -423,6 +471,24 @@
     .carousel-arrow.prev { left: 0; }
     .carousel-arrow.next { right: 0; }
     @media (max-width: 768px) { .carousel-wrapper { padding: 0; } .carousel-arrow { display: none; } }
+
+  
+    /* VISIBILIDADE DE VALORES E SERVIÇOS */
+    .metric-row, .preco-item, .social-row { 
+        display: flex !important; 
+        justify-content: space-between !important; 
+        align-items: center !important; 
+        padding: 10px 0 !important;
+        border-bottom: 1px solid rgba(200,160,80,0.1) !important;
+        width: 100% !important;
+    }
+    .metric-row span, .preco-item span, .social-row span {
+        font-size: 0.9rem !important;
+    }
+    .metric-row span:last-child, .preco-item span:last-child, .social-row span:last-child {
+        color: var(--gold) !important;
+        font-weight: 600 !important;
+    }
 
   </style>
 </head>
