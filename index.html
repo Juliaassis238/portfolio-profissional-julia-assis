@@ -121,7 +121,7 @@
 
     /* SERVIÇOS */
     #servicos { background: var(--black); }
-    .servicos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--gold-border); border: 1px solid var(--gold-border); }
+    .servicos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--gold-border); border: 1px solid var(--gold-border); }
     .servico-card { background: var(--dark); padding: 3rem 2rem; transition: var(--transition); position: relative; overflow: hidden; }
     .servico-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--gold); transform: scaleX(0); transition: transform 0.4s ease; }
     .servico-card:hover::before { transform: scaleX(1); }
@@ -186,7 +186,7 @@
     /* SOCIAL MEDIA */
     #socialmedia { background: var(--dark); padding: 7rem 5rem; }
     .sm-header { max-width: 1400px; margin: 0 auto 4rem; }
-    .sm-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .sm-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
     .sm-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2.5rem; transition: var(--transition); position: relative; overflow: hidden; }
     .sm-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--gold); transform:scaleX(0); transition:transform 0.4s; }
     .sm-card:hover::after { transform:scaleX(1); }
@@ -225,7 +225,7 @@
 
     /* CONTATO */
     #contato { background: var(--black); }
-    .contato-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start; }
+    .contato-inner { display: grid; grid-template-columns: 1fr; gap: 7rem; align-items: start; }
     .contato-body { font-size: .9rem; font-weight: 300; color: var(--gray-light); line-height: 2; margin-bottom: 2.5rem; }
     .contato-info { display: flex; flex-direction: column; gap: 1.2rem; }
     .cinfo-item { display: flex; gap: 1rem; align-items: center; }
@@ -261,6 +261,35 @@
     .reveal-d2 { transition-delay: .3s; }
     .reveal-d3 { transition-delay: .45s; }
 
+    /* WHATSAPP FLUTUANTE */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 999;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+      text-decoration: none;
+    }
+    .whatsapp-float:hover {
+      background: #1eaa4f;
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    }
+    .whatsapp-float svg {
+      width: 32px;
+      height: 32px;
+      fill: white;
+    }
+
     /* MOBILE MENU */
     .mobile-menu { position: fixed; inset: 0; background: var(--black); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform: translateX(100%); transition: transform .5s cubic-bezier(.77,0,.175,1); }
     .mobile-menu.open { transform: translateX(0); }
@@ -284,7 +313,7 @@
     .cat-item.open .cat-desc { display: block; }
     .cat-item.open { flex-direction: column; align-items: flex-start; }
     .cat-item.open .cat-item-top { width: 100%; display: flex; justify-content: space-between; align-items: center; }
-    .packages-grid, .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gold-border); }
+    .packages-grid,     .social-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--gold-border); }
     .package-card, .social-card { background: var(--white); padding: 3rem; color: var(--black); transition: var(--transition); }
     .package-card.featured { background: var(--cream); border: 1px solid var(--gold); }
     .package-tag { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
@@ -984,29 +1013,7 @@
             <div class="cinfo-item"><div class="cinfo-item-text"><strong>Resposta</strong><span>Em até 24 horas úteis</span></div></div>
           </div>
         </div>
-        <div class="contato-form reveal reveal-d2">
-          <form onsubmit="handleSubmit(event)">
-            <div class="cf-row">
-              <div class="cf"><label>Seu Nome</label><input type="text" placeholder="Nome completo" required /></div>
-              <div class="cf"><label>WhatsApp</label><input type="tel" placeholder="+55 00 00000-0000" /></div>
-            </div>
-            <div class="cf"><label>E-mail</label><input type="email" placeholder="seu@email.com" required /></div>
-            <div class="cf">
-              <label>Serviço de Interesse</label>
-              <select required>
-                <option value="">Selecione</option>
-                <option>Web Design</option>
-                <option>Design Gráfico</option>
-                <option>Social Media</option>
-                <option>Marketing & Vendas</option>
-                <option>Pacote Completo</option>
-              </select>
-            </div>
-            <div class="cf"><label>Sobre o Projeto</label><textarea placeholder="Conte-me sobre o que você precisa..." required></textarea></div>
-            <button type="submit" class="btn-gold" style="width:100%; font-family:var(--font-sans); border:none; cursor:pointer; text-align:center;">Enviar Mensagem</button>
-          </form>
-          <div id="form-success" style="display:none; margin-top:1rem; padding:1rem 1.5rem; background:rgba(200,160,80,0.1); border-left:2px solid var(--gold); font-size:0.85rem; color:var(--gold-light);">Mensagem enviada! Retorno em até 24h.</div>
-        </div>
+
       </div>
     </div>
   </section>
@@ -1094,5 +1101,12 @@
       });
     });
   </script>
-</body>
+  <!-- WHATSAPP FLUTUANTE -->
+  <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="whatsapp-float" title="Enviar mensagem via WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004c-1.052 0-2.082.398-2.847 1.12-.735.71-1.14 1.656-1.14 2.655 0 1.859 1.514 3.373 3.375 3.373 1.859 0 3.374-1.514 3.374-3.373 0-.999-.405-1.945-1.14-2.655-.766-.722-1.796-1.12-2.848-1.12m6.604-3.976c-1.466 1.466-3.807 2.534-6.269 2.534-1.034 0-2.047-.198-3.015-.584-2.584-1.017-4.863-3.296-5.88-5.88C.982 2.047.784 1.034.784 0c0-2.462 1.068-4.804 2.534-6.269C4.784-6.735 7.126-7.803 9.588-7.803c1.034 0 2.047.198 3.015.584 2.584 1.017 4.863 3.296 5.88 5.88.386.968.584 1.981.584 3.015 0 2.462-1.068 4.804-2.534 6.269"/>
+    </svg>
+  </a>
+
+  </body>
 </html>
