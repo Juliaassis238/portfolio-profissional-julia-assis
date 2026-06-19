@@ -1,0 +1,45 @@
+
+  <!-- PROVAS SOCIAIS -->
+  <section id="provas-sociais">
+    <div class="provas-header">
+      <p class="section-label">Resultados Comprovados</p>
+      <h2 class="section-title reveal">Provas <em>Sociais</em> de Sucesso</h2>
+    </div>
+    <div class="provas-grid">
+      <div class="prova-card reveal">
+        <div class="prova-icon">✅</div>
+        <div class="prova-number">150+</div>
+        <div class="prova-label">Projetos Entregues</div>
+        <div class="prova-desc">Websites, designs gráficos e campanhas de social media com sucesso comprovado</div>
+      </div>
+      <div class="prova-card reveal reveal-d1">
+        <div class="prova-icon">⭐</div>
+        <div class="prova-number">98%</div>
+        <div class="prova-label">Taxa de Satisfação</div>
+        <div class="prova-desc">Clientes satisfeitos que recomendam nossos serviços para suas redes</div>
+      </div>
+      <div class="prova-card reveal reveal-d2">
+        <div class="prova-icon">📈</div>
+        <div class="prova-number">+300%</div>
+        <div class="prova-label">Crescimento Médio</div>
+        <div class="prova-desc">Aumento de seguidores e engajamento em contas gerenciadas</div>
+      </div>
+      <div class="prova-card reveal reveal-d3">
+        <div class="prova-icon">🏆</div>
+        <div class="prova-number">5 Anos</div>
+        <div class="prova-label">Experiência Comprovada</div>
+        <div class="prova-desc">Atuação profissional em design, web e marketing digital</div>
+      </div>
+    </div>
+    <div class="provas-clients">
+      <p class="clients-title">Empresas e Marcas que Confiam em Nosso Trabalho</p>
+      <div class="clients-logos">
+        <div class="client-logo">Artemyse Design</div>
+        <div class="client-logo">Word Tecnologia</div>
+        <div class="client-logo">Maison Belle</div>
+        <div class="client-logo">Prime Athletics</div>
+        <div class="client-logo">Sweet Lab</div>
+        <div class="client-logo">Aurora Maison</div>
+      </div>
+    </div>
+  </section>
