@@ -219,7 +219,10 @@
     .dep-star { width: 10px; height: 10px; background: var(--gold); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
     .dep-text { font-family: var(--font-serif); font-style: italic; font-size: .92rem; color: rgba(255,255,255,0.68); line-height: 1.9; margin-bottom: 1.5rem; }
     .dep-author { display: flex; align-items: center; gap: 1rem; }
-    .dep-avatar { width: 40px; height: 40px; background: var(--gold-pale); border: 1px solid var(--gold-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-family: var(--font-display); }
+    .dep-avatar { width: 50px; height: 50px; background: var(--gold-pale); border: 1px solid var(--gold-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-family: var(--font-display); overflow: hidden; position: relative; }
+    .dep-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .dep-name { font-size: .85rem; font-weight: 500; color: var(--white); display: flex; align-items: center; gap: 5px; }
+    .verified-badge { width: 14px; height: 14px; fill: #3897f0; }
     .dep-name { font-size: .85rem; font-weight: 500; color: var(--white); }
     .dep-role { font-size: .65rem; color: var(--gray); }
 
@@ -983,17 +986,35 @@
       <div class="dep-card reveal">
         <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
         <p class="dep-text">"A Júlia transformou completamente minha presença digital. O site ficou incrível, profissional e gerou resultados desde o primeiro mês. Recomendo demais!"</p>
-        <div class="dep-author"><div class="dep-avatar">M</div><div><div class="dep-name">Mariana Costa</div><div class="dep-role">Empreendedora · São Paulo</div></div></div>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep1.jpg" alt="Mariana Costa"></div>
+          <div>
+            <div class="dep-name">Mariana Costa <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">Empreendedora · São Paulo</div>
+          </div>
+        </div>
       </div>
       <div class="dep-card reveal reveal-d1">
         <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
         <p class="dep-text">"O design gráfico da minha embalagem ficou acima das minhas expectativas. Criatividade, profissionalismo e entrega no prazo. Parceria de longo prazo garantida."</p>
-        <div class="dep-author"><div class="dep-avatar">R</div><div><div class="dep-name">Rafael Mendes</div><div class="dep-role">CEO · Empresa de Alimentos</div></div></div>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep2.jpg" alt="Rafael Mendes"></div>
+          <div>
+            <div class="dep-name">Rafael Mendes <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">CEO · Empresa de Alimentos</div>
+          </div>
+        </div>
       </div>
       <div class="dep-card reveal reveal-d2">
         <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
         <p class="dep-text">"Minha conta cresceu 300% em 3 meses com a gestão da Júlia. Conteúdo de qualidade, estratégia certeira e engajamento real. Excelente profissional!"</p>
-        <div class="dep-author"><div class="dep-avatar">A</div><div><div class="dep-name">Amanda Ferreira</div><div class="dep-role">Influenciadora Digital</div></div></div>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep3.jpg" alt="Amanda Ferreira"></div>
+          <div>
+            <div class="dep-name">Amanda Ferreira <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">Influenciadora Digital</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
