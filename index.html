@@ -28,894 +28,1219 @@
       --transition: all 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: var(--font-sans); background: var(--black); color: var(--white); overflow-x: hidden; }
-    
-    /* CARROSSEL - ESTILOS GERAIS */
-    .carousel-container {
-      position: relative;
-      width: 100%;
-      padding: 2rem 0;
-      overflow: hidden;
-    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); }
 
-    .carousel {
-      display: flex;
-      gap: 1.5rem;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding: 1rem 0;
-      scrollbar-width: none;
+    /* LOADER */
+    .loader {
+      position: fixed; inset: 0; background: var(--black); z-index: 9999;
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1.5rem;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
+    .loader.hidden { opacity: 0; visibility: hidden; }
+    .loader-name { font-family: var(--font-display); font-size: clamp(2rem, 6vw, 4rem); color: var(--white); letter-spacing: 0.2em; animation: fadeIn 1s ease forwards; }
+    .loader-bar { width: 200px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
+    .loader-fill { height: 100%; background: var(--gold); animation: loadFill 2s ease forwards; }
 
-    .carousel::-webkit-scrollbar {
-      display: none;
-    }
+    /* CURSOR */
+    .cursor { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: transform 0.1s; }
+    .cursor-ring { width: 28px; height: 28px; border: 1px solid var(--gold-border); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9997; transition: all 0.3s ease; transform: translate(-50%,-50%); }
 
-    .carousel-item {
-      flex: 0 0 clamp(280px, 90vw, 380px);
-      scroll-snap-align: center;
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 1.5rem 5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--transition);
     }
+    .navbar.scrolled { background: rgba(10,9,8,0.96); backdrop-filter: blur(20px); padding: 1rem 5rem; border-bottom: 1px solid var(--gold-border); }
+    .nav-logo { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.2em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 400; color: var(--gray-light); text-decoration: none; transition: color 0.3s; position: relative; }
+    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--gold); transition:width 0.3s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { padding: 0.6rem 1.8rem; border: 1px solid var(--gold); color: var(--gold) !important; font-size: 0.62rem !important; letter-spacing: 0.2em !important; transition: var(--transition) !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+    .nav-cta::after { display: none !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { width: 22px; height: 1px; background: var(--white); display: block; }
 
-    .carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--gold);
-      color: var(--black);
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: all 0.3s;
-    }
+    /* HERO */
+    .hero { min-height: 100vh; position: relative; overflow: hidden; display: flex; align-items: center; background: var(--black); }
+    .hero-bg-img { position: absolute; right: 0; top: 0; width: 55%; height: 100%; object-fit: cover; object-position: center top; opacity: 0.25; filter: grayscale(30%); }
+    .hero-gradient { position: absolute; inset: 0; background: linear-gradient(90deg, var(--black) 45%, rgba(10,9,8,0.4) 100%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--gold-border) 1px, transparent 1px), linear-gradient(90deg, var(--gold-border) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.15; }
+    .hero-content { position: relative; z-index: 2; padding: 8rem 5rem 5rem; max-width: 680px; }
+    .hero-tag { font-size: 0.6rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.6s ease 2.5s forwards; }
+    .hero-name { font-family: var(--font-display); font-size: clamp(3.5rem, 8vw, 7rem); line-height: 0.95; color: var(--white); margin-bottom: 0.5rem; opacity: 0; animation: fadeUp 0.8s ease 2.7s forwards; }
+    .hero-name-accent { color: var(--gold); display: block; }
+    .hero-roles { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 2rem 0; opacity: 0; animation: fadeUp 0.7s ease 3s forwards; }
+    .role-pill { padding: 0.4rem 1.2rem; border: 1px solid var(--gold-border); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); background: var(--gold-pale); }
+    .hero-desc { font-size: 0.95rem; font-weight: 300; color: var(--gray-light); line-height: 1.9; max-width: 440px; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.7s ease 3.2s forwards; }
+    .hero-actions { display: flex; gap: 1.2rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s ease 3.4s forwards; }
+    .btn-gold { display: inline-block; padding: 0.9rem 2.5rem; background: var(--gold); color: var(--black); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: var(--transition); border: none; cursor: pointer; }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,160,80,0.3); }
+    .btn-outline { display: inline-block; padding: 0.9rem 2.5rem; border: 1px solid var(--gold-border); color: var(--gold-light); font-size: 0.68rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; transition: var(--transition); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-pale); }
+    .hero-scroll { position: absolute; bottom: 3rem; left: 5rem; z-index: 2; display: flex; align-items: center; gap: 1rem; opacity: 0; animation: fadeIn 0.8s ease 3.8s forwards; }
+    .hero-scroll-line { width: 60px; height: 1px; background: var(--gold); }
+    .hero-scroll span { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); }
 
-    .carousel-arrow:hover {
-      background: var(--gold-light);
-      transform: translateY(-50%) scale(1.1);
-    }
+    /* SECTIONS */
+    .section-wrap { padding: 7rem 5rem; max-width: 1400px; margin: 0 auto; }
+    .section-header { margin-bottom: 4rem; }
+    .section-label { font-size: 0.58rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 0.8rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4rem); color: var(--white); line-height: 1; }
+    .section-title em { font-style: italic; color: var(--gold); }
 
-    .carousel-arrow.prev {
-      left: 1rem;
-    }
-
-    .carousel-arrow.next {
-      right: 1rem;
-    }
-
-    /* SEÇÕES */
-    section {
-      padding: 4rem 1.5rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .section-header {
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-
-    .section-label {
-      font-size: 0.75rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.8rem;
-    }
-
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      color: var(--white);
-      line-height: 1.2;
-    }
-
-    .section-title em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    /* CARD PADRÃO */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-    }
-
-    .card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(200,160,80,0.2);
-    }
-
-    /* TABELA DE PREÇOS */
-    .preco-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 300px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .preco-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(200,160,80,0.2);
-    }
-
-    .preco-card h3 {
-      font-family: var(--font-serif);
-      font-size: 1.1rem;
-      color: var(--white);
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--gold-border);
-      padding-bottom: 0.8rem;
-    }
-
-    .preco-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.7rem 0;
-      border-bottom: 1px solid rgba(200,160,80,0.1);
-      font-size: 0.85rem;
-    }
-
-    .preco-item span:last-child {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* MÉTRICAS SOCIAIS */
-    .metric-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .metric-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(200,160,80,0.2);
-    }
-
-    .metric-card h3 {
-      font-family: var(--font-serif);
-      font-size: 1rem;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .metric-card p {
-      font-size: 0.7rem;
-      color: var(--gray);
-      margin-bottom: 1rem;
-    }
-
-    .metric-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid rgba(200,160,80,0.1);
-      font-size: 0.8rem;
-    }
-
-    .metric-row span:last-child {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* DEPOIMENTOS */
-    .depoimento-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .depoimento-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-    }
-
-    .depoimento-text {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--gray-light);
-      margin-bottom: 1rem;
-      flex-grow: 1;
-    }
-
-    .depoimento-autor {
-      font-weight: 600;
-      color: var(--white);
-      font-size: 0.85rem;
-    }
-
-    .depoimento-cargo {
-      font-size: 0.7rem;
-      color: var(--gold);
-    }
+    /* SOBRE */
+    #sobre { background: var(--dark); }
+    .sobre-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 7rem; align-items: center; }
+    .sobre-img-wrap { position: relative; }
+    .sobre-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; object-position: center top; display: block; filter: grayscale(20%); transition: filter 0.5s; }
+    .sobre-img:hover { filter: grayscale(0%); }
+    .sobre-img-frame { position: absolute; top: -1rem; left: -1rem; right: 1rem; bottom: 1rem; border: 1px solid var(--gold-border); pointer-events: none; z-index: -1; }
+    .sobre-badge { position: absolute; bottom: -2rem; right: -2rem; width: 110px; height: 110px; background: var(--gold); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .sobre-badge strong { font-family: var(--font-display); font-size: 2rem; color: var(--black); line-height: 1; display: block; }
+    .sobre-badge span { font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--black); }
+    .sobre-body { font-size: 0.9rem; font-weight: 300; color: var(--gray-light); line-height: 2; margin-bottom: 1.5rem; }
+    .sobre-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+    .skill-item { display: flex; flex-direction: column; gap: 0.5rem; }
+    .skill-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-light); display: flex; justify-content: space-between; }
+    .skill-bar { height: 2px; background: rgba(255,255,255,0.08); }
+    .skill-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 1.5s ease; width: 0%; }
+    .sobre-contact-items { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 2rem; }
+    .sobre-contact-item { font-size: 0.82rem; font-weight: 300; color: var(--gray-light); display: flex; align-items: center; gap: 0.8rem; }
+    .sobre-contact-item strong { color: var(--gold); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 400; min-width: 80px; }
 
     /* SERVIÇOS */
-    .servico-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-    }
+    #servicos { background: var(--black); }
+    .servicos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--gold-border); border: 1px solid var(--gold-border); }
+    .servico-card { background: var(--dark); padding: 3rem 2rem; transition: var(--transition); position: relative; overflow: hidden; }
+    .servico-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: var(--gold); transform: scaleX(0); transition: transform 0.4s ease; }
+    .servico-card:hover::before { transform: scaleX(1); }
+    .servico-card:hover { background: #1a1918; transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+    .servico-num { font-family: var(--font-display); font-size: 3rem; color: rgba(200,160,80,0.1); line-height:1; margin-bottom: 1.2rem; }
+    .servico-icon { width: 44px; height: 44px; border: 1px solid var(--gold-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; transition: border-color 0.3s; }
+    .servico-card:hover .servico-icon { border-color: var(--gold); }
+    .servico-icon svg { width: 20px; height: 20px; stroke: var(--gold); }
+    .servico-card h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 400; color: var(--white); margin-bottom: 0.8rem; }
+    .servico-card p { font-size: 0.8rem; font-weight: 300; color: var(--gray); line-height: 1.8; }
+    .servico-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+    .stag { font-size: 0.55rem; letter-spacing: 0.1em; padding: 0.25rem 0.7rem; border: 1px solid var(--gold-border); color: var(--gold); }
 
-    .servico-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(200,160,80,0.2);
-    }
+    /* WEB DESIGNER */
+    #webdesigner { background: var(--dark); padding: 7rem 5rem; }
+    .web-header { max-width: 1400px; margin: 0 auto 4rem; }
+    .web-projects-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gold-border); }
+    .web-card { position: relative; overflow: hidden; background: var(--card-bg); transition: var(--transition); }
+    .web-card-img { width:100%; aspect-ratio:16/10; object-fit:cover; display:block; transition: transform 0.6s ease; filter: brightness(0.8) saturate(1.1); }
+    .web-card:hover .web-card-img { transform: scale(1.06); filter: brightness(0.6) saturate(1.2); }
+    .web-card-overlay { position:absolute; inset:0; background: linear-gradient(to top, rgba(10,9,8,0.95) 0%, rgba(10,9,8,0.2) 60%, transparent 100%); display:flex; flex-direction:column; justify-content:flex-end; padding:2rem; }
+    .web-card-type { font-size:0.55rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem; }
+    .web-card h3 { font-family:var(--font-serif); font-style:italic; font-size:1.3rem; font-weight:400; color:var(--white); margin-bottom:0.4rem; }
+    .web-card p { font-size:0.75rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.6; }
+    .web-card-hover { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s; }
+    .web-card:hover .web-card-hover { opacity:1; }
+    .web-card-link { padding:0.7rem 2rem; border:1px solid var(--gold); color:var(--gold); font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; background:rgba(10,9,8,0.6); transition:var(--transition); }
+    .web-card-link:hover { background:var(--gold); color:var(--black); }
+    .web-card.featured { grid-column: span 2; }
+    .web-card.featured .web-card-img { aspect-ratio: 16/7; }
 
-    .servico-card h3 {
-      font-family: var(--font-serif);
-      font-size: 1rem;
-      color: var(--white);
-      margin-bottom: 0.8rem;
-    }
+    /* DESIGN GRÁFICO */
+    #designgrafico { background: var(--black); padding: 7rem 5rem; }
+    .dg-header { max-width: 1400px; margin: 0 auto 4rem; display: flex; justify-content: space-between; align-items: flex-end; }
+    .dg-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+    .dg-item { position: relative; overflow: hidden; border-radius: 2px; }
+    .dg-item.tall { grid-row: span 2; }
+    .dg-item.wide { grid-column: span 2; }
+    .dg-img { width:100%; height:100%; min-height:280px; object-fit:cover; display:block; transition: transform 0.6s ease, filter 0.4s; filter: saturate(0.9); }
+    .dg-item:hover .dg-img { transform: scale(1.06); filter: saturate(1.2); }
+    .dg-overlay { position:absolute; inset:0; background:rgba(10,9,8,0); transition:background 0.4s; display:flex; align-items:flex-end; padding:1.5rem; }
+    .dg-item:hover .dg-overlay { background:rgba(10,9,8,0.6); }
+    .dg-label { font-family:var(--font-serif); font-style:italic; font-size:0.95rem; color:var(--white); opacity:0; transform:translateY(8px); transition:var(--transition); }
+    .dg-item:hover .dg-label { opacity:1; transform:translateY(0); }
 
-    .servico-card p {
-      font-size: 0.85rem;
-      color: var(--gray-light);
-      line-height: 1.6;
-    }
+    /* CARROSSEL */
+    .carousel { position: relative; max-width: 1400px; margin: 0 auto; padding: 0 4rem; }
+    .carousel-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding: 0.5rem 0.25rem 1.5rem; scrollbar-width: none; -ms-overflow-style: none; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track > * { flex: 0 0 clamp(290px, 82vw, 400px); scroll-snap-align: center; }
+    .carousel-track .reveal { opacity: 1 !important; transform: none !important; }
+    .web-track .web-card.featured .web-card-img { aspect-ratio: 16/10; }
+    .dg-track > * { flex: 0 0 clamp(260px, 78vw, 360px); }
+    .dg-track .dg-item { height: 420px; }
+    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 5; width: 52px; height: 52px; border-radius: 50%; background: rgba(10,9,8,0.85); border: 1px solid var(--gold); color: var(--gold); font-size: 1.7rem; line-height: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+    .carousel-arrow:hover { background: var(--gold); color: var(--black); }
+    .carousel-arrow.prev { left: 0; }
+    .carousel-arrow.next { right: 0; }
+    .carousel-hint { max-width: 1400px; margin: 0 auto 1.5rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+    @media (max-width: 768px) { .carousel { padding: 0 1rem; } .carousel-arrow { width: 42px; height: 42px; font-size: 1.4rem; } }
 
     /* SOCIAL MEDIA */
-    .social-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
+    #socialmedia { background: var(--dark); padding: 7rem 5rem; }
+    .sm-header { max-width: 1400px; margin: 0 auto 4rem; }
+    .sm-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .sm-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2.5rem; transition: var(--transition); position: relative; overflow: hidden; }
+    .sm-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--gold); transform:scaleX(0); transition:transform 0.4s; }
+    .sm-card:hover::after { transform:scaleX(1); }
+    .sm-card:hover { border-color: rgba(200,160,80,0.4); transform: translateY(-4px); }
+    .sm-card-num { font-family:var(--font-display); font-size:2.5rem; color:rgba(200,160,80,0.15); margin-bottom:1rem; line-height:1; }
+    .sm-card h3 { font-family:var(--font-serif); font-style:italic; font-size:1.15rem; font-weight:400; color:var(--white); margin-bottom:.7rem; }
+    .sm-card p { font-size:.78rem; font-weight:300; color:var(--gray); line-height:1.9; }
+    .sm-card-res { margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--gold-border); font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); }
+
+    /* PROCESSO */
+    #processo { background: var(--black); padding: 8rem 5rem; }
+    .proc-wrap { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 7rem; align-items: start; }
+    .proc-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; }
+    .proc-step { display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem; border: 1px solid var(--gold-border); background: var(--card-bg); transition: var(--transition); text-align: center; }
+    .proc-step:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .proc-step:hover .ps-num { color: var(--gold); }
+    .ps-num { font-family: var(--font-display); font-size: 2.5rem; color: rgba(200,160,80,0.15); line-height: 1; transition: color 0.3s; }
+    .ps-c h4 { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 400; color: var(--white); margin-bottom: .5rem; }
+    .ps-c p { font-size: .7rem; font-weight: 300; color: var(--gray); line-height: 1.6; }
+    .proc-visual { position: sticky; top: 8rem; display: none; }
+    .proc-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+
+    /* DEPOIMENTOS */
+    #depoimentos { background: var(--dark); }
+    .dep-header { max-width: 1400px; margin: 0 auto 4rem; padding: 7rem 5rem 0; }
+    .dep-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .dep-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2.5rem; transition: var(--transition); }
+    .dep-card:hover { border-color: rgba(200,160,80,0.4); transform: translateY(-3px); }
+    .dep-stars { display: flex; gap: 3px; margin-bottom: 1.2rem; }
+    .dep-star { width: 10px; height: 10px; background: var(--gold); clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+    .dep-text { font-family: var(--font-serif); font-style: italic; font-size: .92rem; color: rgba(255,255,255,0.68); line-height: 1.9; margin-bottom: 1.5rem; }
+    .dep-author { display: flex; align-items: center; gap: 1rem; }
+    .dep-avatar { width: 50px; height: 50px; background: var(--gold-pale); border: 1px solid var(--gold-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gold); font-family: var(--font-display); overflow: hidden; position: relative; }
+    .dep-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .dep-name { font-size: .85rem; font-weight: 500; color: var(--white); display: flex; align-items: center; gap: 5px; }
+    .verified-badge { width: 14px; height: 14px; fill: #3897f0; }
+    .dep-name { font-size: .85rem; font-weight: 500; color: var(--white); }
+    .dep-role { font-size: .65rem; color: var(--gray); }
+
+    /* CONTATO */
+    #contato { background: var(--black); }
+    .contato-inner { display: grid; grid-template-columns: 1fr; gap: 7rem; align-items: start; }
+    .contato-body { font-size: .9rem; font-weight: 300; color: var(--gray-light); line-height: 2; margin-bottom: 2.5rem; }
+    .contato-info { display: flex; flex-direction: column; gap: 1.2rem; }
+    .cinfo-item { display: flex; gap: 1rem; align-items: center; }
+    .cinfo-item-text strong { display: block; font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: .2rem; }
+    .cinfo-item-text span { font-size: .85rem; color: var(--white); }
+    .contato-form { background: var(--dark); padding: 3rem; border: 1px solid var(--gold-border); }
+    .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .cf { margin-bottom: 1.5rem; }
+    .cf label { display: block; font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gray); margin-bottom: .8rem; }
+    .cf input, .cf select, .cf textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--gold-border); padding: .8rem 0; font-family: var(--font-sans); color: var(--white); outline: none; transition: border-color .3s; }
+    .cf input:focus, .cf select:focus, .cf textarea:focus { border-bottom-color: var(--gold); }
+    .cf textarea { height: 100px; resize: none; }
+    .cf select option { background: var(--dark); color: var(--white); }
+
+    /* FOOTER */
+    footer { background: var(--black); padding: 5rem 5rem 3rem; border-top: 1px solid var(--gold-border); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .footer-logo { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: .2em; color: var(--white); text-decoration: none; margin-bottom: 2rem; }
+    .footer-logo span { color: var(--gold); }
+    .footer-links { display: flex; gap: 3rem; list-style: none; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
+    .footer-links a { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gray-light); text-decoration: none; transition: color .3s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { font-size: .72rem; color: var(--gray); }
+    .footer-copy span { color: var(--white); }
+
+    /* ANIMAÇÕES */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes loadFill { from { width: 0; } to { width: 100%; } }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: .15s; }
+    .reveal-d2 { transition-delay: .3s; }
+    .reveal-d3 { transition-delay: .45s; }
+
+    
+    .whatsapp-float:hover {
+      background: #1eaa4f;
+      transform: scale(1.15);
+      box-shadow: 0 8px 28px rgba(37, 211, 102, 0.7);
+    }
+    .whatsapp-float svg {
+      width: 38px;
+      height: 38px;
+      fill: white;
     }
 
-    .social-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
+    /* PROVAS SOCIAIS */
+    #provas-sociais { background: var(--black); padding: 7rem 5rem; }
+    .provas-header { max-width: 1400px; margin: 0 auto 4rem; }
+    .provas-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .prova-card { background: var(--card-bg); border: 1px solid var(--gold-border); padding: 2.5rem; transition: var(--transition); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .prova-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(200,160,80,0.15); }
+    .prova-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .prova-number { font-family: var(--font-display); font-size: 2.8rem; color: var(--gold); line-height: 1; margin-bottom: 0.5rem; }
+    .prova-label { font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray-light); margin-bottom: 0.5rem; }
+    .prova-desc { font-size: 0.75rem; color: var(--gray); line-height: 1.6; }
+    .provas-clients { max-width: 1400px; margin: 4rem auto 0; padding-top: 4rem; border-top: 1px solid var(--gold-border); }
+    .clients-title { font-family: var(--font-serif); font-style: italic; font-size: 1rem; color: var(--gray-light); text-align: center; margin-bottom: 2rem; letter-spacing: 0.1em; }
+    .clients-logos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2rem; align-items: center; justify-items: center; }
+    .client-logo { width: 100%; max-width: 140px; height: 60px; background: var(--dark); border: 1px solid var(--gold-border); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 0.9rem; color: var(--gold); font-weight: 300; letter-spacing: 0.1em; transition: var(--transition); }
+    .client-logo:hover { border-color: var(--gold); background: rgba(200,160,80,0.05); }
+
+    /* MOBILE MENU */
+    .mobile-menu { position: fixed; inset: 0; background: var(--black); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform: translateX(100%); transition: transform .5s cubic-bezier(.77,0,.175,1); }
+    .mobile-menu.open { transform: translateX(0); }
+    .menu-close { position: absolute; top: 2rem; right: 2rem; background: none; border: none; color: var(--white); font-size: 2rem; cursor: pointer; }
+    .menu-link { font-family: var(--font-display); font-size: 2rem; color: var(--white); text-decoration: none; letter-spacing: .1em; }
+
+    /* TABELA PREÇOS */
+    #tabela-precos { background: var(--dark); padding: 7rem 5rem; }
+    .services-container { max-width: 1400px; margin: 0 auto; }
+    .cat-block { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 2px; background: var(--gold-border); gap: 2px; }
+    .cat-header { padding: 40px; display: flex; flex-direction: column; justify-content: center; background: var(--white); border-right: 1px solid var(--gold-border); }
+    .cat-number { font-family: var(--font-display); font-size: 3.5rem; font-weight: 300; line-height: 1; color: var(--gold); opacity: 0.6; display: block; margin-bottom: 0.5rem; }
+    .cat-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; line-height: 1.15; color: var(--black); }
+    .cat-items { display: flex; flex-direction: column; justify-content: center; background: var(--cream); }
+    .cat-item { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 3rem; border-bottom: 1px solid var(--gold-border); transition: background 0.3s ease; gap: 1.2rem; cursor: pointer; }
+    .cat-item:last-child { border-bottom: none; }
+    .cat-item:hover { background: rgba(200,160,80,0.05); }
+    .cat-name { font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400; color: var(--black); line-height: 1.2; }
+    .cat-price { font-family: var(--font-sans); font-size: 1rem; font-weight: 600; color: var(--gold); white-space: nowrap; letter-spacing: 0.05em; }
+    .cat-desc { display: none; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 300; line-height: 1.6; color: var(--gray); margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid var(--gold-border); }
+    .cat-item.open .cat-desc { display: block; }
+    .cat-item.open { flex-direction: column; align-items: flex-start; }
+    .cat-item.open .cat-item-top { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+    .packages-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--gold-border); }
+    .social-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--gold-border); }
+    .package-card, .social-card { background: var(--white); padding: 3rem; color: var(--black); transition: var(--transition); }
+    .package-card.featured { background: var(--cream); border: 1px solid var(--gold); }
+    .package-tag { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: block; }
+    .package-name, .social-card-title { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .package-price { font-size: 2.5rem; font-family: var(--font-display); color: var(--gold); margin: 1.5rem 0; }
+    .package-price span { font-size: 1rem; vertical-align: top; margin-right: 5px; }
+    .package-items { list-style: none; padding: 0; }
+    .package-items li { font-size: 0.9rem; margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; color: var(--gray); }
+    .package-items li::before { content: '✓'; position: absolute; left: 0; color: var(--gold); }
+    .social-card-sub { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); display: block; margin-bottom: 1.5rem; }
+    .social-rows { display: flex; flex-direction: column; gap: 0.8rem; }
+    .social-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(200,160,80,0.1); }
+    .social-row span:last-child { color: var(--gold); font-weight: 600; }
+
+    /* ===== RESPONSIVO ===== */
+    @media (max-width: 1100px) {
+      .navbar { padding: 1.2rem 1.5rem; }
+      .navbar.scrolled { padding: 0.8rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-content { padding: 7rem 1.5rem 4rem; max-width: 100%; }
+      .hero-bg-img { width: 100%; opacity: .12; }
+      .hero-gradient { background: linear-gradient(to top, var(--black) 30%, rgba(10,9,8,0.3) 100%); }
+      .hero-scroll { left: 1.5rem; bottom: 2rem; }
+      .sobre-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .sobre-img-wrap { max-width: 340px; margin: 0 auto; }
+      .sobre-badge { width: 90px; height: 90px; bottom: -1.5rem; right: -1rem; }
+      .sobre-badge strong { font-size: 1.6rem; }
+      .proc-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .proc-visual { display: none; }
+      .contato-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .servicos-grid { grid-template-columns: 1fr 1fr; }
+      .web-projects-grid { grid-template-columns: 1fr 1fr; }
+      .web-card.featured { grid-column: span 2; }
+      .sm-grid { grid-template-columns: 1fr 1fr; }
+      .dep-grid { grid-template-columns: 1fr 1fr; }
+      .section-wrap { padding: 5rem 1.5rem; }
+      #webdesigner { padding: 5rem 1.5rem; }
+      #designgrafico { padding: 5rem 1.5rem; }
+      #socialmedia { padding: 5rem 1.5rem; }
+      #processo { padding: 5rem 1.5rem; }
+      #tabela-precos { padding: 5rem 1.5rem; }
+      footer { padding: 4rem 1.5rem 2rem; }
     }
 
-    .social-card h3 {
-      font-family: var(--font-serif);
-      font-size: 0.95rem;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    .social-card p {
-      font-size: 0.7rem;
-      color: var(--gray);
-      margin-bottom: 1rem;
-    }
-
-    .social-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(200,160,80,0.1);
-      font-size: 0.75rem;
-    }
-
-    .social-row span:last-child {
-      color: var(--gold);
-      font-weight: 600;
-    }
-
-    /* PROCESSO CRIATIVO */
-    .processo-card {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      padding: 1.5rem;
-      transition: all 0.3s;
-      border-radius: 4px;
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .processo-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-4px);
-    }
-
-    .processo-numero {
-      font-family: var(--font-display);
-      font-size: 2rem;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-
-    .processo-card h3 {
-      font-family: var(--font-serif);
-      font-size: 0.95rem;
-      color: var(--white);
-      margin-bottom: 0.5rem;
-    }
-
-    .processo-card p {
-      font-size: 0.8rem;
-      color: var(--gray-light);
-      line-height: 1.5;
-    }
-
-    /* PROVAS SOCIAIS - PERFIS EXPANDÍVEIS */
-    .provas-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .prova-perfil {
-      background: var(--card-bg);
-      border: 1px solid var(--gold-border);
-      border-radius: 8px;
-      padding: 1.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .prova-perfil:hover {
-      border-color: var(--gold);
-      transform: scale(1.05) translateY(-8px);
-      box-shadow: 0 12px 32px rgba(200,160,80,0.25);
-      background: rgba(200,160,80,0.05);
-    }
-
-    .prova-avatar {
-      width: 80px;
-      height: 80px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      border-radius: 50%;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--black);
-    }
-
-    .prova-stat {
-      font-family: var(--font-display);
-      font-size: 1.8rem;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 0.3rem;
-    }
-
-    .prova-label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 0.3rem;
-    }
-
-    .prova-desc {
-      font-size: 0.75rem;
-      color: var(--gray-light);
-      line-height: 1.5;
-    }
-
-    /* BOTÃO DE CONTATO */
-    .contact-button {
-      display: inline-block;
-      padding: 1.2rem 2.5rem;
-      background: var(--gold);
-      color: var(--black);
-      text-decoration: none;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s;
-      border-radius: 4px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .contact-button:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(200,160,80,0.3);
-    }
-
-    /* RESPONSIVIDADE */
     @media (max-width: 768px) {
-      section {
-        padding: 2.5rem 1rem;
-      }
-
-      .carousel-arrow {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-      }
-
-      .carousel-arrow.prev {
-        left: 0.5rem;
-      }
-
-      .carousel-arrow.next {
-        right: 0.5rem;
-      }
-
-      .carousel-item {
-        flex: 0 0 clamp(250px, 85vw, 350px);
-      }
-
-      .section-title {
-        font-size: clamp(1.5rem, 4vw, 2.2rem);
-      }
-
-      .prova-perfil {
-        min-height: 180px;
-      }
-
-      .prova-avatar {
-        width: 70px;
-        height: 70px;
-        font-size: 1.8rem;
-      }
-
-      .prova-stat {
-        font-size: 1.5rem;
-      }
-
-      .contact-button {
-        padding: 1rem 1.5rem;
-        font-size: 0.75rem;
-      }
+      .hero-name { font-size: clamp(2.8rem, 12vw, 4.5rem); }
+      .section-title { font-size: clamp(1.8rem, 8vw, 3rem); }
+      .servicos-grid { grid-template-columns: 1fr; }
+      .web-projects-grid { grid-template-columns: 1fr; }
+      .web-card.featured { grid-column: span 1; }
+      .web-card.featured .web-card-img { aspect-ratio: 16/10; }
+      .dg-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
+      .dg-item.tall { grid-row: span 1; }
+      .dg-item.wide { grid-column: span 2; }
+      .sm-grid { grid-template-columns: 2fr; }
+      .dep-grid { grid-template-columns: 1fr; }
+      .provas-grid { grid-template-columns: repeat(2, 1fr); }
+      .clients-logos { grid-template-columns: repeat(3, 1fr); }
+      .proc-steps { grid-template-columns: repeat(2, 1fr); }
+      .cf-row { grid-template-columns: 1fr; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: 2fr; }
+      .cat-block { grid-template-columns: 1fr; }
+      .cat-header { padding: 1.5rem; border-right: none; border-bottom: 1px solid var(--gold-border); }
+      .cat-item { padding: 1rem 1.2rem; flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+      .cat-item .cat-item-top, .cat-item:not(.open) { flex-direction: row; justify-content: space-between; width: 100%; align-items: center; }
+      .cat-name { font-size: 1rem; }
+      .footer-links { gap: 1.5rem; }
+      .sobre-skills { grid-template-columns: 1fr; }
+      .dg-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .dep-header { padding: 4rem 1.5rem 0; }
+      .dep-grid { padding: 0 1.5rem 4rem; }
+      .contato-form { padding: 2rem 1.5rem; }
     }
 
     @media (max-width: 480px) {
-      section {
-        padding: 2rem 0.8rem;
-      }
-
-      .carousel-arrow {
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
-      }
-
-      .carousel-item {
-        flex: 0 0 clamp(240px, 95vw, 320px);
-      }
-
-      .section-title {
-        font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-      }
-
-      .section-label {
-        font-size: 0.65rem;
-      }
-
-      .preco-card, .metric-card, .depoimento-card, .servico-card, .social-card, .processo-card {
-        min-height: auto;
-        padding: 1rem;
-      }
-
-      .preco-item, .metric-row, .social-row {
-        font-size: 0.75rem;
-        padding: 0.5rem 0;
-      }
-
-      .prova-perfil {
-        min-height: 160px;
-        padding: 1rem;
-      }
-
-      .prova-avatar {
-        width: 60px;
-        height: 60px;
-        font-size: 1.5rem;
-        margin-bottom: 0.8rem;
-      }
-
-      .prova-stat {
-        font-size: 1.3rem;
-      }
-
-      .prova-label {
-        font-size: 0.75rem;
-      }
-
-      .prova-desc {
-        font-size: 0.7rem;
-      }
+      .hero-content { padding: 6rem 1.2rem 3rem; }
+      .hero-roles { gap: 0.5rem; }
+      .role-pill { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
+      .hero-actions { flex-direction: column; }
+      .btn-gold, .btn-outline { text-align: center; padding: 0.85rem 2rem; }
+      .dg-grid { grid-template-columns: 1fr; }
+      .dg-item.wide { grid-column: span 1; }
+      .sobre-badge { width: 75px; height: 75px; bottom: -1rem; right: -0.5rem; }
+      .sobre-badge strong { font-size: 1.3rem; }
+      .sobre-badge span { font-size: 0.4rem; }
+      .menu-link { font-size: 1.5rem; }
+      .provas-grid { grid-template-columns: 1fr; }
+      .clients-logos { grid-template-columns: repeat(2, 1fr); }
+      .proc-steps { grid-template-columns: 1fr; }
+      .sm-grid { grid-template-columns: 1fr; }
+      .dep-grid { grid-template-columns: 1fr; }
+      .social-grid { grid-template-columns: 1fr; }
     }
+  
+    /* AJUSTES PARA CARROSSEIS SOLICITADOS */
+    .carousel-track { display: flex; gap: 1.5rem; overflow-x: auto; scroll-behavior: smooth; padding: 1rem 0; scrollbar-width: none; -ms-overflow-style: none; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track > * { flex: 0 0 clamp(300px, 85vw, 420px); }
+    .carousel-container { position: relative; }
+    .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gold); color: var(--black); border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+    .carousel-arrow.prev { left: -15px; }
+    .carousel-arrow.next { right: -15px; }
+    @media (max-width: 768px) { .carousel-arrow { display: none; } .carousel-track { padding: 0 1rem; } }
+
   </style>
 </head>
 <body>
 
+  <div class="loader" id="loader">
+    <div class="loader-name">JÚLIA ÁGATA</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">J<span>.</span>ÁGATA</a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#webdesigner">Web Design</a></li>
+      <li><a href="#designgrafico">Design Gráfico</a></li>
+      <li><a href="#socialmedia">Social Media</a></li>
+      <li><a href="#contato" class="nav-cta">Contratar</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="menu-close" id="menuClose">&times;</button>
+    <a href="#sobre" class="menu-link">SOBRE</a>
+    <a href="#servicos" class="menu-link">SERVIÇOS</a>
+    <a href="#webdesigner" class="menu-link">WEB DESIGN</a>
+    <a href="#designgrafico" class="menu-link">DESIGN GRÁFICO</a>
+    <a href="#socialmedia" class="menu-link">SOCIAL MEDIA</a>
+    <a href="#contato" class="menu-link">CONTATO</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=1400&q=90" class="hero-bg-img" alt="Background" />
+    <div class="hero-gradient"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <p class="hero-tag">Portfólio Criativo · 2025</p>
+      <h1 class="hero-name">JÚLIA <span class="hero-name-accent">ÁGATA.</span></h1>
+      <div class="hero-roles">
+        <span class="role-pill">Marketing & Vendas</span>
+        <span class="role-pill">Web Designer</span>
+        <span class="role-pill">Designer Gráfico</span>
+        <span class="role-pill">Social Media</span>
+      </div>
+      <p class="hero-desc">Criatividade com estratégia. Transformo ideias em experiências visuais que conectam marcas ao seu público e geram resultados reais.</p>
+      <div class="hero-actions">
+        <a href="#webdesigner" class="btn-gold">Ver Projetos</a>
+        <a href="#contato" class="btn-outline">Fale Comigo</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll para explorar</span>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre" class="section-wrap">
+    <div class="sobre-grid">
+      <div class="sobre-img-wrap reveal">
+        <img src="perfil_foto-sobre.jpeg" class="sobre-img" alt="Júlia Ágata de Assis" />
+        <div class="sobre-img-frame"></div>
+        <div class="sobre-badge">
+          <strong>5+</strong>
+          <span>Anos de Mercado</span>
+        </div>
+      </div>
+      <div class="reveal reveal-d1">
+        <p class="section-label">Quem Sou Eu</p>
+        <h2 class="section-title">Criatividade com <em>propósito.</em></h2>
+        <div class="sobre-body">
+          <p>Sou Júlia Ágata de Assis, profissional apaixonada pela interseção entre criatividade, estratégia e resultados. Atuo com marketing, web design, design gráfico e gestão de redes sociais, entregando soluções que vão além da estética — elas convertem.</p>
+          <p>Cada projeto é único: ouço, entendo, planejo e executo com dedicação total. Do briefing à entrega, minha missão é superar expectativas.</p>
+        </div>
+        <div class="sobre-skills">
+          <div class="skill-item">
+            <div class="skill-label"><span>Web Design</span><span>95%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="95"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Design Gráfico</span><span>92%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Social Media</span><span>90%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-label"><span>Marketing</span><span>88%</span></div>
+            <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
+          </div>
+        </div>
+        <div class="sobre-contact-items">
+          <div class="sobre-contact-item"><strong>WhatsApp</strong><span>+55 34 98808-6470</span></div>
+          <div class="sobre-contact-item"><strong>Localização</strong><span>Brasil</span></div>
+          <div class="sobre-contact-item"><strong>Disponível</strong><span>Para projetos freelance & contratos</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WEB DESIGNER -->
+  <section id="webdesigner">
+    <div class="web-header">
+      <p class="section-label">Projetos de Web Design</p>
+      <h2 class="section-title reveal">Sites <em>Premium</em> Desenvolvidos</h2>
+    </div>
+    <p class="carousel-hint">Clique nas setas para ver mais projetos &rarr;</p>
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="webTrack">&#8249;</button>
+      <div class="carousel-track web-track" id="webTrack">
+      <div class="web-card featured reveal">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=85" alt="Maison Belle Studio" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Salão de Beleza Premium</div>
+          <h3>Maison Belle Studio</h3>
+          <p>Site luxuoso com parallax, cursor personalizado, galeria de transformações e agendamento. Paleta nude e dourado fosco.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/maison-belle-studio/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d1">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=700&q=85" alt="Vita Care Institute" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Clínica Médica Premium</div>
+          <h3>Vita Care Institute</h3>
+          <p>Interface hospitalar moderna com dashboard, especialidades e equipe médica. Azul escuro e ciano.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/vita-care-institute/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d2">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=85" alt="Prime Athletics Club" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Academia de Luxo</div>
+          <h3>Prime Athletics Club</h3>
+          <p>Design dark premium com neon, ticker animado, trainers e planos. Interface futurista preto e laranja.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/prime-athletics-club/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=700&q=85" alt="Urban Axis Architecture" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Escritório de Arquitetura</div>
+          <h3>Urban Axis Architecture</h3>
+          <p>Minimalismo sofisticado com masonry grid de projetos e timeline institucional premium.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/urban-axis-architecture/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d1">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1488477181946-6428a0291777?w=700&q=85" alt="Sweet Lab Pâtisserie" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Confeitaria Gourmet</div>
+          <h3>Sweet Lab Pâtisserie</h3>
+          <p>Visual feminino rosé gold com cardápio gourmet, galeria, depoimentos e encomendas.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/sweet-lab-patisserie/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d2">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=85" alt="NovaCore Systems" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Empresa de Tecnologia</div>
+          <h3>NovaCore Systems</h3>
+          <p>Interface cyber futurista com partículas em Canvas JS, dashboard animado e serviços tech.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/novacore-systems/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=700&q=85" alt="Velocity Auto Garage" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Oficina Automotiva Premium</div>
+          <h3>Velocity Auto Garage</h3>
+          <p>Design esportivo com galeria de carros, performance tuning e agendamento. Preto e vermelho.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/velocity-auto-garage/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d1">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=700&q=85" alt="Aurora Maison" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Loja Fashion Premium</div>
+          <h3>Aurora Maison</h3>
+          <p>Editorial fashion estilo Vogue com coleções, lookbook e newsletter. Branco, bege e dourado.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/aurora-maison/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal reveal-d2">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&q=85" alt="Royal Imperial Resort" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Hotel de Luxo 5 Estrelas</div>
+          <h3>Royal Imperial Resort</h3>
+          <p>Visual 5 estrelas com reserva integrada, suítes premium e experiências exclusivas. Preto e dourado.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/royal-imperial-resort/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      <div class="web-card reveal">
+        <img class="web-card-img" src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=700&q=85" alt="Horizon Legal Society" />
+        <div class="web-card-overlay">
+          <div class="web-card-type">Escritório Jurídico Premium</div>
+          <h3>Horizon Legal Society</h3>
+          <p>Interface corporativa sofisticada com áreas jurídicas, advogados e formulário de consulta.</p>
+        </div>
+        <div class="web-card-hover"><a href="https://juliaassis238.github.io/horizon-legal-society/" target="_blank" class="web-card-link">Ver Projeto</a></div>
+      </div>
+      </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="webTrack">&#8250;</button>
+    </div>
+  </section>
+
+  <!-- DESIGN GRÁFICO -->
+  <section id="designgrafico">
+    <div class="dg-header">
+      <div>
+        <p class="section-label">Designer Gráfico</p>
+        <h2 class="section-title reveal">Artes & <em>Edições</em> Personalizadas</h2>
+      </div>
+    </div>
+    <p class="carousel-hint">Clique nas setas para ver mais artes &rarr;</p>
+    <div class="carousel">
+      <button class="carousel-arrow prev" aria-label="Anterior" data-carousel="dgTrack">&#8249;</button>
+      <div class="carousel-track dg-track" id="dgTrack">
+      <!-- Imagem 1: Logos Artemyse (tall) -->
+      <div class="dg-item tall reveal">
+        <img class="dg-img" src="dg1_logos-artemyse_coluna-esquerda-alta.png" alt="Identidade Visual Artemyse" />
+        <div class="dg-overlay"><span class="dg-label">Identidade Visual — Logos Artemyse</span></div>
+      </div>
+      <!-- Imagem 2: Artemyse brand (wide) -->
+      <div class="dg-item wide reveal reveal-d1">
+        <img class="dg-img" src="dg2_branding-artemyse_topo-centro-larga.png" alt="Branding Artemyse" />
+        <div class="dg-overlay"><span class="dg-label">Branding — Artemyse Design</span></div>
+      </div>
+      <!-- Imagem 3: Word Tecnologia -->
+      <div class="dg-item reveal reveal-d1">
+        <img class="dg-img" src="dg3_word-tecnologia_centro-pequena.png" alt="Word Tecnologia" />
+        <div class="dg-overlay"><span class="dg-label">Social Media — Word Tecnologia</span></div>
+      </div>
+      <!-- Imagem 4: IA Marketing (wide) -->
+      <div class="dg-item wide reveal reveal-d1">
+        <img class="dg-img" src="dg4_ia-marketing_centro-larga.png" alt="Inteligência Artificial Marketing" />
+        <div class="dg-overlay"><span class="dg-label">Design Digital — IA & Marketing</span></div>
+      </div>
+      <!-- Imagem 5: Fashion Editorial (tall) -->
+      <div class="dg-item tall reveal">
+        <img class="dg-img" src="dg5_fashion-editorial_coluna-direita-alta.png" alt="Fashion Editorial" />
+        <div class="dg-overlay"><span class="dg-label">Fashion Editorial — Edições Personalizadas</span></div>
+      </div>
+      <!-- Imagem 6: Natal Embalagem -->
+      <div class="dg-item reveal reveal-d2">
+        <img class="dg-img" src="dg6_natal-embalagem_meio-pequena.png" alt="Natal Embalagem" />
+        <div class="dg-overlay"><span class="dg-label">Natal Especial — Embalagem Festiva</span></div>
+      </div>
+      <!-- Imagem 7: Feliz Natal (wide) -->
+      <div class="dg-item wide reveal reveal-d1">
+        <img class="dg-img" src="dg7_feliz-natal_baixo-larga.png" alt="Feliz Natal" />
+        <div class="dg-overlay"><span class="dg-label">Editorial Natalino — Designs Personalizados</span></div>
+      </div>
+      <!-- Imagem 8: Natal HoHoHo -->
+      <div class="dg-item reveal">
+        <img class="dg-img" src="dg8_natal-hohoho_baixo-pequena.png" alt="Natal Personalizado" />
+        <div class="dg-overlay"><span class="dg-label">Natal — Designs Personalizados</span></div>
+      </div>
+      <!-- Imagem 9: Fashion Verde (wide) -->
+      <div class="dg-item wide reveal reveal-d1">
+        <img class="dg-img" src="dg9_fashion-verde_final-larga.png" alt="Design Personalizado Fashion" />
+        <div class="dg-overlay"><span class="dg-label">Design Personalizado — Criação de Artes</span></div>
+      </div>
+      </div>
+      <button class="carousel-arrow next" aria-label="Próximo" data-carousel="dgTrack">&#8250;</button>
+    </div>
+  </section>
+
   <!-- TABELA DE PREÇOS -->
-  <section id="tabela-precos">
-    <div class="section-header">
-      <span class="section-label">Investimento</span>
-      <h2 class="section-title">Tabela de <em>Preços</em></h2>
-    </div>
-    <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="precosCarousel">
-        <div class="carousel-item">
-          <div class="preco-card">
-            <h3>Web & Identidade</h3>
-            <div class="preco-item"><span>Criação de Sites</span><span>R$ 400</span></div>
-            <div class="preco-item"><span>Portfólios Digitais</span><span>R$ 300</span></div>
-            <div class="preco-item"><span>Currículos Premium</span><span>R$ 75</span></div>
-            <div class="preco-item"><span>Logotipos</span><span>R$ 150</span></div>
-          </div>
+  <section id="tabela-precos" class="reveal">
+    <div class="services-container">
+      <div class="section-header">
+        <p class="section-label">Investimento</p>
+        <h2 class="section-title">Tabela de <em>Preços</em></h2>
+      </div>
+      <div class="cat-block">
+        <div class="cat-header">
+          <span class="cat-number">01</span>
+          <h3 class="cat-title">Web & Identidade</h3>
         </div>
-        <div class="carousel-item">
-          <div class="preco-card">
-            <h3>Dados & Gestão</h3>
-            <div class="preco-item"><span>Planilhas Personalizadas</span><span>R$ 130</span></div>
-            <div class="preco-item"><span>Controle Financeiro</span><span>R$ 150</span></div>
-            <div class="preco-item"><span>Dashboards</span><span>R$ 280</span></div>
-            <div class="preco-item"><span>Relatórios Automáticos</span><span>R$ 200</span></div>
+        <div class="cat-items">
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Criação de Sites Profissionais</span><span class="cat-price">R$ 400</span></div>
+            <div class="cat-desc">Site completo e responsivo com até 5 páginas (Home, Sobre, Serviços, Portfólio e Contato), domínio configurado, formulário de contato e integração com redes sociais.</div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="preco-card">
-            <h3>Criação Visual</h3>
-            <div class="preco-item"><span>Imagens com IA</span><span>R$ 80</span></div>
-            <div class="preco-item"><span>Edição de Fotos</span><span>R$ 50</span></div>
-            <div class="preco-item"><span>Artes para Redes</span><span>R$ 50</span></div>
-            <div class="preco-item"><span>Banners Profissionais</span><span>R$ 100</span></div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Criação de Portfólios Digitais</span><span class="cat-price">R$ 300</span></div>
+            <div class="cat-desc">Portfólio online personalizado para exibir seus trabalhos com galeria de imagens, seção sobre você, área de contato e link pronto para compartilhar.</div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="preco-card">
-            <h3>Conteúdo & Documentos</h3>
-            <div class="preco-item"><span>Catálogos Digitais</span><span>R$ 200</span></div>
-            <div class="preco-item"><span>Apresentações</span><span>R$ 230</span></div>
-            <div class="preco-item"><span>E-books</span><span>R$ 200</span></div>
-            <div class="preco-item"><span>Manuais Interativos</span><span>R$ 250</span></div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Currículos Profissionais Premium</span><span class="cat-price">R$ 75</span></div>
+            <div class="cat-desc">Currículo em PDF com design premium, formatação elegante, foto profissional incluída e versão pronta para envio por e-mail ou WhatsApp.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Criação de Logotipos</span><span class="cat-price">R$ 150</span></div>
+            <div class="cat-desc">Logotipo original criado do zero com até 3 propostas de conceito, arquivo final em PNG, SVG e PDF, versão colorida e em preto e branco.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Cartão de Visita Digital</span><span class="cat-price">R$ 80</span></div>
+            <div class="cat-desc">Cartão de visita digital interativo com seus dados, link para WhatsApp, redes sociais e portfólio — compartilhável por link ou QR Code.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Assinatura Profissional para E-mail</span><span class="cat-price">R$ 80</span></div>
+            <div class="cat-desc">Assinatura formatada com nome, cargo, contatos, logo e links das redes sociais — pronta para inserir no Gmail, Outlook ou qualquer outro cliente de e-mail.</div>
           </div>
         </div>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
-    </div>
-  </section>
-
-  <!-- MÉTRICAS SOCIAIS -->
-  <section id="metricas-sociais">
-    <div class="section-header">
-      <span class="section-label">Gestão de Engajamento</span>
-      <h2 class="section-title">Métricas <em>Sociais</em></h2>
-    </div>
-    <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="metricasCarousel">
-        <div class="carousel-item">
-          <div class="metric-card">
-            <h3>Seguidores Mundiais</h3>
-            <p>Instagram Global</p>
-            <div class="metric-row"><span>200</span><span>R$ 9,50</span></div>
-            <div class="metric-row"><span>500</span><span>R$ 16,00</span></div>
-            <div class="metric-row"><span>1.000</span><span>R$ 29,00</span></div>
-            <div class="metric-row"><span>5.000</span><span>R$ 89,00</span></div>
-          </div>
+      <div class="cat-block">
+        <div class="cat-header">
+          <span class="cat-number">02</span>
+          <h3 class="cat-title">Dados & Gestão</h3>
         </div>
-        <div class="carousel-item">
-          <div class="metric-card">
-            <h3>Seguidores Brasileiros</h3>
-            <p>Perfis Nacionais</p>
-            <div class="metric-row"><span>100</span><span>R$ 9,00</span></div>
-            <div class="metric-row"><span>200</span><span>R$ 15,00</span></div>
-            <div class="metric-row"><span>500</span><span>R$ 32,00</span></div>
-            <div class="metric-row"><span>1.000</span><span>R$ 64,00</span></div>
+        <div class="cat-items">
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Planilhas Personalizadas</span><span class="cat-price">R$ 130</span></div>
+            <div class="cat-desc">Planilha no Excel ou Google Sheets desenvolvida conforme sua necessidade, com fórmulas automáticas, formatação profissional e instruções de uso.</div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="metric-card">
-            <h3>Curtidas Brasileiras</h3>
-            <p>Engajamento Nacional</p>
-            <div class="metric-row"><span>500</span><span>R$ 15,00</span></div>
-            <div class="metric-row"><span>1.000</span><span>R$ 26,00</span></div>
-            <div class="metric-row"><span>5.000</span><span>R$ 78,00</span></div>
-            <div class="metric-row"><span>10.000</span><span>R$ 145,00</span></div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Planilhas de Controle Financeiro</span><span class="cat-price">R$ 150</span></div>
+            <div class="cat-desc">Planilha de controle de entradas e saídas, com dashboard de resumo mensal, gráficos automáticos e categorização de despesas.</div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="metric-card">
-            <h3>Curtidas Mundiais</h3>
-            <p>Engajamento Global</p>
-            <div class="metric-row"><span>1.000</span><span>R$ 13,00</span></div>
-            <div class="metric-row"><span>10.000</span><span>R$ 38,00</span></div>
-            <div class="metric-row"><span>50.000</span><span>R$ 78,00</span></div>
-            <div class="metric-row"><span>100.000</span><span>R$ 145,00</span></div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Dashboards e Relatórios</span><span class="cat-price">R$ 280</span></div>
+            <div class="cat-desc">Painel visual de dados personalizado com gráficos, indicadores e tabelas — ideal para apresentar resultados de forma clara e profissional.</div>
           </div>
         </div>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
-    </div>
-  </section>
-
-  <!-- DEPOIMENTOS -->
-  <section id="depoimentos">
-    <div class="section-header">
-      <span class="section-label">Feedback</span>
-      <h2 class="section-title">Depoimentos de <em>Clientes</em></h2>
-    </div>
-    <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="depoimentosCarousel">
-        <div class="carousel-item">
-          <div class="depoimento-card">
-            <p class="depoimento-text">"Júlia transformou completamente a identidade visual da minha marca. Trabalho profissional, atencioso e entrega dentro do prazo. Super recomendo!"</p>
-            <div>
-              <div class="depoimento-autor">Marina Silva</div>
-              <div class="depoimento-cargo">Diretora - Artemyse Design</div>
-            </div>
-          </div>
+      <div class="cat-block">
+        <div class="cat-header">
+          <span class="cat-number">03</span>
+          <h3 class="cat-title">Criação Visual</h3>
         </div>
-        <div class="carousel-item">
-          <div class="depoimento-card">
-            <p class="depoimento-text">"O website que Júlia criou para minha empresa aumentou nossas vendas em 40%. Excelente design e muito funcional. Obrigado!"</p>
-            <div>
-              <div class="depoimento-autor">Carlos Mendes</div>
-              <div class="depoimento-cargo">CEO - Word Tech</div>
-            </div>
+        <div class="cat-items">
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Criação de Imagens com IA</span><span class="cat-price">R$ 80</span></div>
+            <div class="cat-desc">Criação de até 5 imagens exclusivas geradas com inteligência artificial, com base no seu briefing, em alta resolução prontas para uso digital ou impresso.</div>
           </div>
-        </div>
-        <div class="carousel-item">
-          <div class="depoimento-card">
-            <p class="depoimento-text">"Gestão de redes sociais impecável! Júlia entende de estratégia e sabe como engajar o público. Resultados reais e mensuráveis."</p>
-            <div>
-              <div class="depoimento-autor">Beatriz Costa</div>
-              <div class="depoimento-cargo">Gerente - Maison Belle</div>
-            </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Edição e Melhoria de Fotos</span><span class="cat-price">R$ 50</span></div>
+            <div class="cat-desc">Edição profissional de até 5 fotos: remoção de fundo, correção de cores, ajuste de iluminação e retoque — entregues em alta resolução.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Artes para Redes Sociais</span><span class="cat-price">R$ 50</span></div>
+            <div class="cat-desc">Pack com até 5 artes personalizadas para Instagram, Facebook ou WhatsApp — posts, stories ou capas — no seu estilo e identidade visual.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Certificados Personalizados</span><span class="cat-price">R$ 80</span></div>
+            <div class="cat-desc">Template de certificado com identidade visual da sua marca, campos editáveis e arquivo em PDF pronto para emissão e envio.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Convites Digitais</span><span class="cat-price">R$ 95</span></div>
+            <div class="cat-desc">Convite digital animado ou estático em formato de imagem ou link interativo, personalizado com tema, cores e dados do evento.</div>
           </div>
         </div>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
+      <div class="cat-block">
+        <div class="cat-header">
+          <span class="cat-number">04</span>
+          <h3 class="cat-title">Conteúdo & Documentos</h3>
+        </div>
+        <div class="cat-items">
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Catálogos Digitais</span><span class="cat-price">R$ 200</span></div>
+            <div class="cat-desc">Catálogo em PDF ou formato digital com fotos dos produtos, descrições, preços e identidade visual da marca — até 10 produtos inclusos.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Catálogo para WhatsApp Business</span><span class="cat-price">R$ 220</span></div>
+            <div class="cat-desc">Cadastro e organização completa do catálogo no WhatsApp Business com fotos, descrições, preços e categorias — até 15 produtos.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Cardápios Digitais</span><span class="cat-price">R$ 180</span></div>
+            <div class="cat-desc">Cardápio digital elegante em PDF ou link online, com fotos dos itens, preços, categorias e QR Code para acesso fácil pelos clientes.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Apresentações Profissionais</span><span class="cat-price">R$ 230</span></div>
+            <div class="cat-desc">Apresentação em PowerPoint ou Google Slides com até 15 slides, design premium, ícones, gráficos e estrutura narrativa para impactar.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">E-books Personalizados</span><span class="cat-price">R$ 200</span></div>
+            <div class="cat-desc">E-book formatado com capa, miolo diagramado, tipografia profissional e exportação em PDF — ideal para infoprodutos, guias ou portfólios.</div>
+          </div>
+          <div class="cat-item" onclick="this.classList.toggle('open')">
+            <div class="cat-item-top"><span class="cat-name">Documentos e Formulários Personalizados</span><span class="cat-price">R$ 150</span></div>
+            <div class="cat-desc">Criação de contratos, propostas, formulários ou qualquer documento profissional com identidade visual da sua marca, em PDF editável.</div>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="section-header" style="margin-top: 5rem;">
+        <p class="section-label">Gestão de Engajamento</p>
+        <h2 class="section-title">Métricas <em>Sociais</em></h2>
+      </div>
+      <div class="social-grid">
+        <!-- Seguidores Mundiais -->
+        <div class="social-card">
+          <h3 class="social-card-title">Seguidores Mundiais</h3>
+          <span class="social-card-sub">Instagram Global</span>
+          <div class="social-rows">
+            <div class="social-row"><span>200</span><span>R$ 9,50</span></div>
+            <div class="social-row"><span>500</span><span>R$ 16,00</span></div>
+            <div class="social-row"><span>700</span><span>R$ 19,50</span></div>
+            <div class="social-row"><span>1.000</span><span>R$ 29,00</span></div>
+            <div class="social-row"><span>2.000</span><span>R$ 55,00</span></div>
+            <div class="social-row"><span>3.000</span><span>R$ 65,00</span></div>
+            <div class="social-row"><span>4.000</span><span>R$ 75,00</span></div>
+            <div class="social-row"><span>5.000</span><span>R$ 89,00</span></div>
+            <div class="social-row"><span>10.000</span><span>R$ 163,00</span></div>
+          </div>
+        </div>
+        <!-- Seguidores Brasileiros -->
+        <div class="social-card">
+          <h3 class="social-card-title">Seguidores Brasileiros</h3>
+          <span class="social-card-sub">Perfis Nacionais 🇧🇷</span>
+          <div class="social-rows">
+            <div class="social-row"><span>100</span><span>R$ 9,00</span></div>
+            <div class="social-row"><span>200</span><span>R$ 15,00</span></div>
+            <div class="social-row"><span>500</span><span>R$ 32,00</span></div>
+            <div class="social-row"><span>1.000</span><span>R$ 64,00</span></div>
+          </div>
+        </div>
+        <!-- Curtidas Brasileiras -->
+        <div class="social-card">
+          <h3 class="social-card-title">Curtidas Brasileiras</h3>
+          <span class="social-card-sub">Engajamento Nacional</span>
+          <div class="social-rows">
+            <div class="social-row"><span>500</span><span>R$ 15,00</span></div>
+            <div class="social-row"><span>1.000</span><span>R$ 26,00</span></div>
+          </div>
+        </div>
+        <!-- Curtidas Mundiais -->
+        <div class="social-card">
+          <h3 class="social-card-title">Curtidas Mundiais</h3>
+          <span class="social-card-sub">Engajamento Global</span>
+          <div class="social-rows">
+            <div class="social-row"><span>1.000</span><span>R$ 13,00</span></div>
+            <div class="social-row"><span>10.000</span><span>R$ 38,00</span></div>
+            <div class="social-row"><span>20.000</span><span>R$ 53,00</span></div>
+            <div class="social-row"><span>50.000</span><span>R$ 78,00</span></div>
+          </div>
+        </div>
+        <!-- Visualizações Instagram (Reels) -->
+        <div class="social-card">
+          <h3 class="social-card-title">Visualizações Instagram</h3>
+          <span class="social-card-sub">Reels</span>
+          <div class="social-rows">
+            <div class="social-row"><span>2.000</span><span>R$ 8,00</span></div>
+            <div class="social-row"><span>5.000</span><span>R$ 13,00</span></div>
+            <div class="social-row"><span>10.000</span><span>R$ 25,00</span></div>
+            <div class="social-row"><span>20.000</span><span>R$ 35,00</span></div>
+            <div class="social-row"><span>50.000</span><span>R$ 55,00</span></div>
+          </div>
+        </div>
+        <!-- Alcance de Métricas -->
+        <div class="social-card">
+          <h3 class="social-card-title">Alcance de Métricas</h3>
+          <span class="social-card-sub">Visibilidade</span>
+          <div class="social-rows">
+            <div class="social-row"><span>2.000</span><span>R$ 10,00</span></div>
+            <div class="social-row"><span>5.000</span><span>R$ 20,00</span></div>
+            <div class="social-row"><span>10.000</span><span>R$ 30,00</span></div>
+          </div>
+        </div>
+        <!-- Comentários Brasileiros -->
+        <div class="social-card">
+          <h3 class="social-card-title">Comentários Brasileiros</h3>
+          <span class="social-card-sub">Perfis Reais 🇧🇷</span>
+          <div class="social-rows">
+            <div class="social-row"><span>30</span><span>R$ 27,00</span></div>
+            <div class="social-row"><span>50</span><span>R$ 47,00</span></div>
+            <div class="social-row"><span>70</span><span>R$ 60,00</span></div>
+            <div class="social-row"><span>100</span><span>R$ 75,00</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- SERVIÇOS -->
   <section id="servicos">
-    <div class="section-header">
-      <span class="section-label">O Que Ofereço</span>
-      <h2 class="section-title">Serviços <em>Profissionais</em></h2>
-    </div>
+    <div class="section-wrap">
+      <div class="section-header">
+        <p class="section-label">O Que Ofereço</p>
+        <h2 class="section-title reveal">Serviços <em>Completos</em></h2>
+      </div>
+      
     <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="servicosCarousel">
-        <div class="carousel-item">
-          <div class="servico-card">
-            <h3>Design Gráfico</h3>
-            <p>Criação de identidades visuais, logotipos, materiais de marketing e artes para redes sociais com foco em impacto e originalidade.</p>
+      <button class="carousel-arrow prev" onclick="document.getElementById('servicosTrack').scrollBy({-350, 0})">&#8249;</button>
+      <div class="carousel-track" id="servicosTrack">
+        
+        <div class="servico-card reveal">
+          <div class="servico-num">01
+      </div>
+      <button class="carousel-arrow next" onclick="document.getElementById('servicosTrack').scrollBy({350, 0})">&#8250;</button>
+    </div>
+          <div class="servico-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
           </div>
+          <h3>Web Design</h3>
+          <p>Sites premium, responsivos e modernos com HTML, CSS e JavaScript. Do conceito à entrega, interfaces que impressionam e convertem.</p>
+          <div class="servico-tags"><span class="stag">HTML/CSS</span><span class="stag">JavaScript</span><span class="stag">Responsivo</span></div>
         </div>
-        <div class="carousel-item">
-          <div class="servico-card">
-            <h3>Desenvolvimento Web</h3>
-            <p>Websites responsivos, portfólios digitais e plataformas web modernas, otimizadas para SEO e com excelente experiência do usuário.</p>
+        <div class="servico-card reveal reveal-d1">
+          <div class="servico-num">02</div>
+          <div class="servico-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.5"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/><path d="M12 15.5v-3l-2-2"/></svg>
           </div>
+          <h3>Design Gráfico</h3>
+          <p>Criação de artes, identidade visual, mockups de produtos e edições personalizadas com estética profissional e criatividade única.</p>
+          <div class="servico-tags"><span class="stag">Artes</span><span class="stag">Mockups</span><span class="stag">Identidade Visual</span></div>
         </div>
-        <div class="carousel-item">
-          <div class="servico-card">
-            <h3>Social Media</h3>
-            <p>Gestão completa de redes sociais, criação de conteúdo estratégico, calendário editorial e análise de métricas para crescimento real.</p>
+        <div class="servico-card reveal reveal-d2">
+          <div class="servico-num">03</div>
+          <div class="servico-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           </div>
+          <h3>Social Media</h3>
+          <p>Gestão estratégica de redes sociais, criação de conteúdo, calendário editorial e crescimento orgânico com foco em engajamento.</p>
+          <div class="servico-tags"><span class="stag">Instagram</span><span class="stag">Conteúdo</span><span class="stag">Estratégia</span></div>
         </div>
-        <div class="carousel-item">
-          <div class="servico-card">
-            <h3>Marketing Digital</h3>
-            <p>Estratégias de marketing, campanhas direcionadas, análise de dados e consultoria para maximizar seu ROI e alcance de mercado.</p>
+        <div class="servico-card reveal reveal-d3">
+          <div class="servico-num">04</div>
+          <div class="servico-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
+          <h3>Marketing & Vendas</h3>
+          <p>Estratégias de marketing digital, funis de vendas, copywriting persuasivo e campanhas que geram resultados mensuráveis.</p>
+          <div class="servico-tags"><span class="stag">Marketing Digital</span><span class="stag">Copywriting</span><span class="stag">Funil</span></div>
         </div>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
     </div>
   </section>
 
   <!-- SOCIAL MEDIA -->
-  <section id="social-media">
-    <div class="section-header">
-      <span class="section-label">Estratégia Digital</span>
-      <h2 class="section-title">Social <em>Media</em></h2>
-    </div>
-    <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="socialCarousel">
-        <div class="carousel-item">
-          <div class="social-card">
-            <h3>Instagram Growth</h3>
-            <p>Crescimento orgânico</p>
-            <div class="social-row"><span>Seguidores</span><span>+300%</span></div>
-            <div class="social-row"><span>Engajamento</span><span>+250%</span></div>
-            <div class="social-row"><span>Alcance</span><span>+400%</span></div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="social-card">
-            <h3>TikTok Viral</h3>
-            <p>Conteúdo viral</p>
-            <div class="social-row"><span>Visualizações</span><span>+500%</span></div>
-            <div class="social-row"><span>Compartilhamentos</span><span>+350%</span></div>
-            <div class="social-row"><span>Comentários</span><span>+280%</span></div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="social-card">
-            <h3>LinkedIn Profissional</h3>
-            <p>Networking B2B</p>
-            <div class="social-row"><span>Conexões</span><span>+200%</span></div>
-            <div class="social-row"><span>Impressões</span><span>+320%</span></div>
-            <div class="social-row"><span>Leads</span><span>+180%</span></div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="social-card">
-            <h3>YouTube Monetizado</h3>
-            <p>Conteúdo em vídeo</p>
-            <div class="social-row"><span>Inscritos</span><span>+450%</span></div>
-            <div class="social-row"><span>Visualizações</span><span>+600%</span></div>
-            <div class="social-row"><span>Renda</span><span>+520%</span></div>
-          </div>
-        </div>
+  <section id="socialmedia">
+    <div class="section-wrap">
+      <div class="sm-header">
+        <p class="section-label">Gestão de Redes Sociais</p>
+        <h2 class="section-title reveal">Social <em>Media</em> Estratégico</h2>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
+      
+    <div class="carousel-container">
+      <button class="carousel-arrow prev" onclick="document.getElementById('smTrack').scrollBy({-350, 0})">&#8249;</button>
+      <div class="carousel-track" id="smTrack">
+        
+        <div class="sm-card reveal"><div class="sm-card-num">01
+      </div>
+      <button class="carousel-arrow next" onclick="document.getElementById('smTrack').scrollBy({350, 0})">&#8250;</button>
+    </div><h3>Estratégia de Conteúdo</h3><p>Calendário editorial, pauta temática, pesquisa de tendências e criação de conteúdo alinhado à identidade da marca.</p><div class="sm-card-res">+180% de alcance orgânico médio</div></div>
+        <div class="sm-card reveal reveal-d1"><div class="sm-card-num">02</div><h3>Criação Visual</h3><p>Design de posts, stories, reels covers e carrosséis. Identidade visual consistente e impactante em cada publicação.</p><div class="sm-card-res">Alta taxa de salvamento e compartilhamento</div></div>
+        <div class="sm-card reveal reveal-d2"><div class="sm-card-num">03</div><h3>Crescimento & Engajamento</h3><p>Otimização de perfil, hashtags estratégicos, interação com comunidade e análise de métricas contínua.</p><div class="sm-card-res">Crescimento consistente mês a mês</div></div>
+        <div class="sm-card reveal"><div class="sm-card-num">04</div><h3>Campanhas Pagas</h3><p>Gestão de anúncios no Instagram e Facebook Ads com segmentação precisa, testes A/B e otimização de ROI.</p><div class="sm-card-res">ROAS médio de 4x nas campanhas</div></div>
+        <div class="sm-card reveal reveal-d1"><div class="sm-card-num">05</div><h3>Copywriting</h3><p>Legendas envolventes, CTAs eficazes e textos que comunicam valor, constroem autoridade e geram ação.</p><div class="sm-card-res">Mais conversões via DM e link na bio</div></div>
+        <div class="sm-card reveal reveal-d2"><div class="sm-card-num">06</div><h3>Relatórios & Análises</h3><p>Relatórios mensais completos com métricas, insights estratégicos e recomendações para evolução dos resultados.</p><div class="sm-card-res">Decisões baseadas em dados reais</div></div>
+      </div>
     </div>
   </section>
 
-  <!-- PROCESSO CRIATIVO -->
+  <!-- PROCESSO -->
   <section id="processo">
-    <div class="section-header">
-      <span class="section-label">Metodologia</span>
-      <h2 class="section-title">Meu Processo <em>Criativo</em></h2>
-    </div>
+    <div class="section-wrap">
+      <div class="section-header">
+        <p class="section-label">Como Trabalho</p>
+        <h2 class="section-title reveal">Meu <em>Processo</em> Criativo</h2>
+      </div>
+      <div class="proc-wrap">
+        
     <div class="carousel-container">
-      <button class="carousel-arrow prev" onclick="scrollCarousel(event, -1)">&#8249;</button>
-      <div class="carousel" id="processoCarousel">
-        <div class="carousel-item">
-          <div class="processo-card">
-            <div class="processo-numero">1</div>
-            <h3>Descoberta</h3>
-            <p>Entendo profundamente seu negócio, objetivos e público-alvo para criar uma estratégia personalizada.</p>
-          </div>
+      <button class="carousel-arrow prev" onclick="document.getElementById('procTrack').scrollBy({-350, 0})">&#8249;</button>
+      <div class="carousel-track" id="procTrack">
+        
+          <div class="proc-step reveal"><div class="ps-num">01
+      </div>
+      <button class="carousel-arrow next" onclick="document.getElementById('procTrack').scrollBy({350, 0})">&#8250;</button>
+    </div><div class="ps-c"><h4>Descoberta & Briefing</h4><p>Ouço seus objetivos, público-alvo e referências para entender a essência do projeto antes de começar.</p></div></div>
+          <div class="proc-step reveal reveal-d1"><div class="ps-num">02</div><div class="ps-c"><h4>Pesquisa & Estratégia</h4><p>Analiso mercado, concorrentes e tendências para embasar decisões criativas com inteligência estratégica.</p></div></div>
+          <div class="proc-step reveal reveal-d2"><div class="ps-num">03</div><div class="ps-c"><h4>Criação & Desenvolvimento</h4><p>Executo com atenção obsessiva a detalhes visuais, tipografia, cores e experiência do usuário.</p></div></div>
+          <div class="proc-step reveal reveal-d3"><div class="ps-num">04</div><div class="ps-c"><h4>Revisão & Refinamento</h4><p>Apresento, coletamos feedback e refino até a perfeição. Sua satisfação é o padrão inegociável.</p></div></div>
+          <div class="proc-step reveal"><div class="ps-num">05</div><div class="ps-c"><h4>Entrega & Suporte</h4><p>Entrego arquivos organizados e ofereço suporte pós-entrega para garantir que tudo funcione perfeitamente.</p></div></div>
         </div>
-        <div class="carousel-item">
-          <div class="processo-card">
-            <div class="processo-numero">2</div>
-            <h3>Conceituação</h3>
-            <p>Desenvolvimento de conceitos criativos e inovadores que refletem sua marca e ressoam com seu público.</p>
-          </div>
+        <div class="proc-visual">
+          <img class="proc-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&q=85" alt="Processo criativo" />
         </div>
-        <div class="carousel-item">
-          <div class="processo-card">
-            <div class="processo-numero">3</div>
-            <h3>Design</h3>
-            <p>Criação de designs profissionais, modernos e alinhados com as tendências atuais do mercado.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="processo-card">
-            <div class="processo-numero">4</div>
-            <h3>Desenvolvimento</h3>
-            <p>Implementação técnica com código limpo, responsivo e otimizado para todas as plataformas.</p>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="processo-card">
-            <div class="processo-numero">5</div>
-            <h3>Entrega</h3>
-            <p>Apresentação final, suporte técnico e acompanhamento pós-projeto para seu sucesso contínuo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos">
+    <div class="dep-header">
+      <p class="section-label">O Que Dizem</p>
+      <h2 class="section-title reveal">Clientes <em>Satisfeitos</em></h2>
+    </div>
+    <div class="dep-grid" style="max-width:1400px; margin:0 auto; padding: 0 5rem 7rem;">
+      <div class="dep-card reveal">
+        <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
+        <p class="dep-text">"A Júlia transformou completamente minha presença digital. O site ficou incrível, profissional e gerou resultados desde o primeiro mês. Recomendo demais!"</p>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep1.jpg" alt="Mariana Costa"></div>
+          <div>
+            <div class="dep-name">Mariana Costa <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">Empreendedora · São Paulo</div>
           </div>
         </div>
       </div>
-      <button class="carousel-arrow next" onclick="scrollCarousel(event, 1)">&#8250;</button>
+      <div class="dep-card reveal reveal-d1">
+        <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
+        <p class="dep-text">"O design gráfico da minha embalagem ficou acima das minhas expectativas. Criatividade, profissionalismo e entrega no prazo. Parceria de longo prazo garantida."</p>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep2.jpg" alt="Rafael Mendes"></div>
+          <div>
+            <div class="dep-name">Rafael Mendes <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">CEO · Empresa de Alimentos</div>
+          </div>
+        </div>
+      </div>
+      <div class="dep-card reveal reveal-d2">
+        <div class="dep-stars"><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div><div class="dep-star"></div></div>
+        <p class="dep-text">"Minha conta cresceu 300% em 3 meses com a gestão da Júlia. Conteúdo de qualidade, estratégia certeira e engajamento real. Excelente profissional!"</p>
+        <div class="dep-author">
+          <div class="dep-avatar"><img src="dep3.jpg" alt="Amanda Ferreira"></div>
+          <div>
+            <div class="dep-name">Amanda Ferreira <svg class="verified-badge" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg></div>
+            <div class="dep-role">Influenciadora Digital</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+
 
   <!-- PROVAS SOCIAIS -->
   <section id="provas-sociais">
-    <div class="section-header">
-      <span class="section-label">Resultados Comprovados</span>
-      <h2 class="section-title">Provas <em>Sociais</em> de Sucesso</h2>
+    <div class="provas-header">
+      <p class="section-label">Resultados Comprovados</p>
+      <h2 class="section-title reveal">Provas <em>Sociais</em> de Sucesso</h2>
     </div>
     <div class="provas-grid">
-      <div class="prova-perfil">
-        <div class="prova-avatar">150+</div>
-        <div class="prova-stat">150+</div>
+      <div class="prova-card reveal">
+        <div class="prova-icon">✅</div>
+        <div class="prova-number">150+</div>
         <div class="prova-label">Projetos Entregues</div>
-        <div class="prova-desc">Websites, designs e campanhas com sucesso comprovado</div>
+        <div class="prova-desc">Websites, designs gráficos e campanhas de social media com sucesso comprovado</div>
       </div>
-      <div class="prova-perfil">
-        <div class="prova-avatar">98%</div>
-        <div class="prova-stat">98%</div>
+      <div class="prova-card reveal reveal-d1">
+        <div class="prova-icon">⭐</div>
+        <div class="prova-number">98%</div>
         <div class="prova-label">Taxa de Satisfação</div>
-        <div class="prova-desc">Clientes satisfeitos que recomendam nossos serviços</div>
+        <div class="prova-desc">Clientes satisfeitos que recomendam nossos serviços para suas redes</div>
       </div>
-      <div class="prova-perfil">
-        <div class="prova-avatar">300%</div>
-        <div class="prova-stat">300%</div>
+      <div class="prova-card reveal reveal-d2">
+        <div class="prova-icon">📈</div>
+        <div class="prova-number">+300%</div>
         <div class="prova-label">Crescimento Médio</div>
-        <div class="prova-desc">Aumento de seguidores em contas gerenciadas</div>
+        <div class="prova-desc">Aumento de seguidores e engajamento em contas gerenciadas</div>
       </div>
-      <div class="prova-perfil">
-        <div class="prova-avatar">5+</div>
-        <div class="prova-stat">5 Anos</div>
-        <div class="prova-label">Experiência</div>
-        <div class="prova-desc">Atuação profissional em design e marketing digital</div>
+      <div class="prova-card reveal reveal-d3">
+        <div class="prova-icon">🏆</div>
+        <div class="prova-number">5 Anos</div>
+        <div class="prova-label">Experiência Comprovada</div>
+        <div class="prova-desc">Atuação profissional em design, web e marketing digital</div>
+      </div>
+    </div>
+    <div class="provas-clients">
+      <p class="clients-title">Empresas e Marcas que Confiam em Nosso Trabalho</p>
+      <div class="clients-logos">
+        <div class="client-logo">Artemyse Design</div>
+        <div class="client-logo">Word Tecnologia</div>
+        <div class="client-logo">Maison Belle</div>
+        <div class="client-logo">Prime Athletics</div>
+        <div class="client-logo">Sweet Lab</div>
+        <div class="client-logo">Aurora Maison</div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="provas-sociais" style="padding: 5rem 1.5rem;">
+    <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+      <p class="section-label">Resultados Comprovados</p>
+      <h2 class="section-title">Provas <em>Sociais</em> de Sucesso</h2>
+    </div>
+    <div class="carousel-container">
+      <div class="carousel-track" id="provasTrack" style="display: flex; gap: 2rem;">
+        <div class="card" style="text-align: center; padding: 2rem; flex: 0 0 280px;">
+          <div style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--black); font-size: 1.5rem;">150+</div>
+          <h3 style="color: var(--gold); margin-bottom: 0.5rem;">Projetos</h3>
+          <p style="font-size: 0.8rem; color: var(--gray-light);">Websites e designs entregues com sucesso</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 2rem; flex: 0 0 280px;">
+          <div style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--black); font-size: 1.5rem;">98%</div>
+          <h3 style="color: var(--gold); margin-bottom: 0.5rem;">Satisfação</h3>
+          <p style="font-size: 0.8rem; color: var(--gray-light);">Taxa de recomendação dos nossos clientes</p>
+        </div>
+        <div class="card" style="text-align: center; padding: 2rem; flex: 0 0 280px;">
+          <div style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--black); font-size: 1.5rem;">300%</div>
+          <h3 style="color: var(--gold); margin-bottom: 0.5rem;">Crescimento</h3>
+          <p style="font-size: 0.8rem; color: var(--gray-light);">Aumento médio de engajamento social</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- CONTATO -->
   <section id="contato">
-    <div class="section-header">
-      <span class="section-label">Vamos Criar Juntos</span>
-      <h2 class="section-title">Pronta para o seu <em>próximo</em> projeto</h2>
-    </div>
-    <p style="text-align: center; font-size: 0.95rem; color: var(--gray-light); margin-bottom: 2rem; line-height: 1.8;">
-      Seja um site novo, uma identidade visual, gestão de redes sociais ou uma estratégia completa de marketing — estou pronta para transformar seus objetivos em resultados reais. Entre em contato e vamos conversar!
-    </p>
-    <div style="text-align: center;">
-      <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="contact-button">ENTRAR EM CONTATO VIA WHATSAPP</a>
-    </div>
-    <div style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: var(--gray);">
-      <p>WhatsApp: +55 34 98808-6470</p>
-      <p>Email: contato@juliaassis.com</p>
+    <div style="padding: 7rem 5rem; max-width: 1400px; margin: 0 auto;">
+      <div class="contato-inner">
+        <div class="contato-left reveal">
+          <p class="section-label">Vamos Criar Juntos</p>
+          <h2 class="section-title" style="margin-bottom:1.5rem;">Pronta para o<br>seu <em>próximo</em> projeto.</h2>
+          <p class="contato-body">Seja um site novo, uma identidade visual, gestão de redes sociais ou uma estratégia completa de marketing — estou pronta para transformar seus objetivos em resultados reais. Entre em contato e vamos conversar!</p>
+          <div class="contato-info">
+            <div class="cinfo-item"><div class="cinfo-item-text"><strong>WhatsApp</strong><span>+55 34 988086470</span></div></div>
+        <div style="margin-top: 3rem; text-align: center; width: 100%;">
+          <a href="https://wa.me/5534988086470?text=Olá%20Júlia!%20Gostaria%20de%20conversar%20sobre%20um%20projeto." target="_blank" class="btn-gold" style="display: block; width: 100%; text-align: center; padding: 1.5rem; font-size: 1rem;">ENTRAR EM CONTATO AGORA</a>
+        </div>
+
+            <div class="cinfo-item"><div class="cinfo-item-text"><strong>Área de Atuação</strong><span>Marketing · Web Design · Design Gráfico · Social Media</span></div></div>
+            <div class="cinfo-item"><div class="cinfo-item-text"><strong>Disponibilidade</strong><span>Freelance & Projetos — Segunda a Sexta</span></div></div>
+            <div class="cinfo-item"><div class="cinfo-item-text"><strong>Resposta</strong><span>Em até 24 horas úteis</span></div></div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <script>
-    function scrollCarousel(event, direction) {
-      const button = event.target.closest('.carousel-arrow');
-      const carousel = button.parentElement.querySelector('.carousel');
-      const scrollAmount = 350;
-      carousel.scrollBy({
-        left: direction * scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  </script>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">J<span>.</span>ÁGATA</a>
+      <ul class="footer-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#webdesigner">Web Design</a></li>
+        <li><a href="#designgrafico">Design Gráfico</a></li>
+        <li><a href="#socialmedia">Social Media</a></li>
+      </ul>
+      <p class="footer-copy">&copy; 2025 <span>Júlia Ágata de Assis</span>. Todos os direitos reservados.</p>
+    </div>
+  </footer>
 
-</body>
+  <script>
+    // Loader
+    window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('hidden'), 2200));
+
+    // Cursor (only desktop)
+    if (window.matchMedia('(pointer: fine)').matches) {
+      const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx - 3 + 'px'; cursor.style.top = my - 3 + 'px'; });
+      (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); })();
+    }
+
+    // Navbar scroll
+    window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60));
+
+    // Mobile menu
+    document.getElementById('hamburger').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
+    document.getElementById('menuClose').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+    document.querySelectorAll('.menu-link').forEach(l => l.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
+
+    // Reveal on scroll
+    const revObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+    // Skill bars
+    const skillObs = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-fill').forEach(bar => bar.style.width = bar.dataset.w + '%');
+        skillObs.unobserve(entry.target);
+      }
+    }), { threshold: 0.4 });
+    const skillSection = document.querySelector('.sobre-skills');
+    if (skillSection) skillObs.observe(skillSection);
+
+    // Form submit
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('form-success').style.display = 'block';
+      e.target.reset();
+      setTimeout(() => document.getElementById('form-success').style.display = 'none', 5000);
+    }
+
+    // Parallax hero
+    window.addEventListener('scroll', () => {
+      const heroBg = document.querySelector('.hero-bg-img');
+      if (heroBg) heroBg.style.transform = `translateY(${window.scrollY * 0.25}px)`;
+    });
+
+    // Active nav link
+    const sections = document.querySelectorAll('section[id], div[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+      navLinks.forEach(a => { a.style.color = ''; if (a.getAttribute('href') === '#' + current) a.style.color = 'var(--gold)'; });
+    });
+
+    // Carrosséis (setas)
+    document.querySelectorAll('.carousel-arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const track = document.getElementById(btn.dataset.carousel);
+        if (!track) return;
+        const card = track.querySelector('*');
+        const step = card ? card.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+        const dir = btn.classList.contains('next') ? 1 : -1;
+        track.scrollBy({ left: step * dir, behavior: 'smooth' });
+      });
+    });
+  </script>
+  
+
+  </body>
 </html>
