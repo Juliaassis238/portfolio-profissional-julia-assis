@@ -1,0 +1,23 @@
+Mapeamento parcial das imagens anexadas para os projetos do portfólio:
+
+IMG_3248.JPG -> NovaCore Systems
+IMG_3249.JPG -> Velocity Auto Garage
+IMG_3250.JPG -> Aurora Maison
+IMG_3251.JPG -> Royal Imperial Resort
+IMG_3252.JPG -> Horizon Legal Society
+IMG_3253.JPG -> Urban Axis Architecture
+
+IMG_3254.JPG -> Prime Athletics Club
+IMG_3255.JPG -> Vita Care Institute
+IMG_3256.JPG -> Sweet Lab Patisserie
+IMG_3257.JPG -> Maison Belle Studio
+
+Observações de implementação solicitadas pela usuária:
+- Manter apenas as mudanças pedidas.
+- Colocar a foto pessoal na capa do site.
+- Subir a seção de sites para mais acima.
+- Subir a seção de designs gráficos para mais acima e transformar em carrossel.
+- Melhorar o visual dos carrosséis e das setas sem cortar as imagens.
+- Trocar a seção de serviços em tópicos por um texto médio explicativo.
+- Corrigir a cidade para Araxá, Minas Gerais.
+- Usar as imagens anexadas nas capas dos sites correspondentes e criar/adicionar onde faltar.

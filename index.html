@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Júlia Ágata de Assis — Web Designer & Desenvolvedora de Sites</title>
+<meta name="description" content="Criação de sites profissionais, modernos e responsivos. Web Design, Desenvolvimento e Marketing Digital.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  img { opacity: 0; transition: opacity 0.5s ease-in; }
+  img.loaded { opacity: 1; }
+
+  :root{
+    --bg:#FAF7F1;
+    --bg-alt:#F1EBDF;
+    --panel:#FFFFFF;
+    --ink:#1C1A16;
+    --muted:#6B655B;
+    --muted-2:#8B8578;
+    --green:#1F4433;
+    --green-deep:#0F241B;
+    --gold:#A9824C;
+    --line:rgba(28,26,22,0.13);
+    --line-soft:rgba(28,26,22,0.07);
+    --serif:'Fraunces', serif;
+    --sans:'Inter', sans-serif;
+    --mono:'Space Grotesk', sans-serif;
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+    width: 100%;
+  }
+  img{max-width:100%;display:block; opacity: 0; transition: opacity 0.5s ease-in;}
+  img.loaded { opacity: 1; }
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+  
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .eyebrow::before{content:""; width:20px;height:1px; background:var(--gold);}
+
+  h1,h2,h3,h4{font-family:var(--serif); font-weight:500; color:var(--ink);}
+
+  /* ============ HEADER ============ */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    padding:20px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    transition: all .4s var(--ease);
+  }
+  header.scrolled{
+    background:rgba(250,247,241,.95);
+    backdrop-filter:blur(10px);
+    padding:12px 24px;
+    box-shadow:0 1px 0 var(--line);
+  }
+  .brand img{height:48px; width:auto;}
+  
+  nav.primary-nav{display:flex;align-items:center;gap:30px;}
+  nav.primary-nav ul{display:flex;gap:24px;}
+  nav.primary-nav a{
+    font-size:12px;letter-spacing:.05em;text-transform:uppercase;font-family:var(--mono);
+  }
+  .nav-cta{
+    border:1px solid var(--ink); padding:8px 18px;
+    font-size:11px;text-transform:uppercase;font-family:var(--mono);
+  }
+
+  .menu-toggle{
+    display:none;flex-direction:column;gap:6px;width:28px;z-index:1100;
+  }
+  .menu-toggle span{height:1.5px;width:100%;background:var(--ink);transition:all .3s;}
+  .menu-toggle.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg);}
+  .menu-toggle.open span:nth-child(2){opacity:0;}
+  .menu-toggle.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg);}
+
+  .mobile-drawer{
+    position:fixed;inset:0;background:var(--bg);z-index:1050;
+    display:none;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .mobile-drawer.open{display:flex;}
+  .mobile-drawer ul{display:flex;flex-direction:column;align-items:center;gap:24px;margin-bottom:40px;}
+  .mobile-drawer a{font-family:var(--serif);font-size:28px;}
+
+  /* ============ HERO ============ */
+  .hero{padding:140px 0 80px; min-height:100vh; display:flex; align-items:center;}
+  .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .hero-text h1{font-size:clamp(42px,6vw,72px); line-height:1.1; margin:20px 0 24px;}
+  .hero-text h1 em{font-style:italic;font-weight:400;color:var(--green);}
+  .hero-text .lead{font-size:18px;color:var(--muted);max-width:480px;margin-bottom:32px;}
+  .hero-actions{display:flex;gap:16px;}
+  .btn{padding:14px 28px; font-size:12px; font-family:var(--mono); text-transform:uppercase; transition:all .3s;}
+  .btn-solid{background:var(--green);color:#fff;}
+  .btn-line{border:1px solid var(--ink);}
+
+  .hero-portrait{position:relative;}
+  .hero-portrait .frame{position:absolute;top:-12px;left:-12px;right:12px;bottom:12px; border:1px solid var(--gold);z-index:0;}
+  .hero-portrait .img-box{position:relative;z-index:1;aspect-ratio:4/5;overflow:hidden;}
+  .hero-portrait img{width:100%;height:100%;object-fit:cover;}
+  .hero-portrait .tag{
+    position:absolute;bottom:16px;left:16px;z-index:2;
+    background:rgba(250,247,241,.9);padding:10px 16px;
+    font-family:var(--mono);font-size:10px;text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;
+  }
+  .hero-portrait .tag .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  /* ============ ABOUT ============ */
+  .about{padding:100px 0;}
+  .about-grid{display:grid;grid-template-columns:0.6fr 1fr;gap:60px;}
+  .about-label{position:sticky;top:120px;align-self:start;}
+  .about-copy p{font-size:18px;color:var(--muted);margin-bottom:24px;}
+  .about-copy p:first-child{font-family:var(--serif);font-size:24px;color:var(--ink);line-height:1.4;}
+  .about-copy .signature{margin-top:40px;padding-top:30px;border-top:1px solid var(--line); font-family:var(--serif);font-style:italic;font-size:20px;}
+
+  /* ============ SITES ============ */
+  .sites{padding:100px 0;background:var(--bg-alt);overflow:hidden;}
+  .sites .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;}
+  /* ============ CAROUSEL ARROWS ============ */
+  .carousel-container { position: relative; }
+  .carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 100; cursor: pointer; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: rgba(31, 68, 51, 0.9); border: 1.5px solid rgba(31, 68, 51, 1); border-radius: 50%; transition: all 0.3s var(--ease); opacity: 1; visibility: visible; }
+  .carousel-arrow:hover { background: rgba(31, 68, 51, 1); transform: translateY(-50%) scale(1.15); box-shadow: 0 4px 16px rgba(31, 68, 51, 0.4); }
+  .carousel-arrow.prev { left: 16px; }
+  .carousel-arrow.next { right: 16px; }
+  .carousel-arrow::after { content: ''; width: 16px; height: 16px; border: solid #fff; border-width: 2px 2px 0 0; }
+  .carousel-arrow.prev::after { transform: rotate(-135deg); margin-left: 2px; }
+  .carousel-arrow.next::after { transform: rotate(45deg); margin-left: -2px; }
+  @media(max-width: 768px) { .carousel-arrow { width: 40px; height: 40px; } .carousel-arrow.prev { left: 8px; } .carousel-arrow.next { right: 8px; } }
+  @media(min-width: 769px) { .carousel-arrow { opacity: 1; visibility: visible; } }
+  
+  .carousel-viewport{
+    width:100vw;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;
+    overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+  }
+  .carousel-viewport::-webkit-scrollbar{display:none;}
+  .carousel-track{display:flex;gap:20px;padding:20px 24px 20px calc(50vw - 600px);}
+  .site-card{scroll-snap-align:start;flex:0 0 auto;width:min(380px, 85vw); background:var(--panel);border:1px solid var(--line); cursor:pointer; transition:all .3s; position:relative; overflow:hidden;}
+  .site-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(28,26,22,0.1);}
+  .site-thumb{aspect-ratio:16/10;overflow:hidden;}
+  .site-thumb img{width:100%;height:100%;object-fit:cover;}
+  .site-info{padding:24px;}
+  .site-info h4{font-size:18px;margin-bottom:12px;}
+  .site-info .visit{font-family:var(--mono);font-size:11px;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+  .site-card-link{position:absolute;inset:0;z-index:10;}
+
+  /* ============ DESIGNS ============ */
+  .designs{padding:100px 0;overflow:hidden;}
+  .design-card{scroll-snap-align:start;flex:0 0 auto;width:min(300px, 70vw); aspect-ratio:1; overflow:hidden; display: flex; align-items: center; justify-content: center;}
+  .design-card img{width:100%;height:100%;object-fit:contain; background: #fff;}
+
+  /* ============ PRICING ============ */
+  .pricing{padding:100px 0;background:var(--bg-alt);}
+  .price-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1px;background:var(--line);}
+  .price-card{background:var(--panel);padding:40px 32px;}
+  .price-card h3{font-size:22px; margin-bottom:16px;}
+  .price-row{padding:16px 0;border-top:1px solid var(--line-soft);}
+  .price-row:first-of-type{border-top:none;}
+  .price-row .row-head{display:flex;justify-content:space-between;font-family:var(--serif);font-size:17px; align-items: baseline; gap: 10px;}
+  .price-row .row-head span:last-child{font-family:var(--mono); font-size:14px; color:var(--gold);}
+
+  /* ============ CERTIFICADOS ============ */
+  .certificates{padding:100px 0;background:var(--bg);}
+  .cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;margin-top:48px;}
+  .cert-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    overflow:hidden;
+    transition:all .3s var(--ease);
+    cursor:pointer;
+    position:relative;
+  }
+  .cert-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(28,26,22,0.12);}
+  .cert-card:hover .cert-overlay{opacity:1;}
+  .cert-thumb{
+    aspect-ratio:16/10;
+    overflow:hidden;
+    position:relative;
+    background:#f5f0e8;
+  }
+  .cert-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+  .cert-card:hover .cert-thumb img{transform:scale(1.04);}
+  .cert-overlay{
+    position:absolute;inset:0;
+    background:rgba(31,68,51,0.7);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;transition:opacity .3s;
+  }
+  .cert-overlay span{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;
+    letter-spacing:.15em;color:#fff;
+    border:1px solid rgba(255,255,255,.6);
+    padding:10px 22px;
+  }
+  .cert-body{padding:28px 28px 32px;}
+  .cert-issuer{
+    font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .cert-issuer::before{content:'';width:16px;height:1px;background:var(--gold);}
+  .cert-body h4{font-family:var(--serif);font-size:20px;line-height:1.3;margin-bottom:14px;}
+  .cert-meta{
+    display:flex;gap:20px;flex-wrap:wrap;
+    padding-top:16px;border-top:1px solid var(--line-soft);
+  }
+  .cert-meta-item{display:flex;flex-direction:column;gap:3px;}
+  .cert-meta-item .label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted-2);}
+  .cert-meta-item .value{font-family:var(--mono);font-size:12px;color:var(--ink);}
+  .cert-badge{
+    position:absolute;top:16px;right:16px;
+    background:var(--green);color:#fff;
+    font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+    padding:5px 12px;
+  }
+
+  /* ============ MODAL CERTIFICADO ============ */
+  .cert-modal-overlay{
+    position:fixed;inset:0;z-index:2000;
+    background:rgba(28,26,22,0.85);
+    backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+    opacity:0;pointer-events:none;
+    transition:opacity .4s var(--ease);
+  }
+  .cert-modal-overlay.open{opacity:1;pointer-events:all;}
+  .cert-modal{
+    background:var(--panel);
+    max-width:860px;width:100%;
+    max-height:90vh;
+    overflow-y:auto;
+    position:relative;
+    transform:translateY(20px);
+    transition:transform .4s var(--ease);
+  }
+  .cert-modal-overlay.open .cert-modal{transform:translateY(0);}
+  .cert-modal-header{
+    padding:24px 28px;
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .cert-modal-header h3{font-family:var(--serif);font-size:18px;}
+  .cert-modal-close{
+    width:36px;height:36px;
+    border:1px solid var(--line);
+    background:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:var(--ink);
+    transition:all .2s;
+  }
+  .cert-modal-close:hover{background:var(--ink);color:#fff;}
+  .cert-modal-body{padding:28px;}
+  .cert-modal-img{width:100%;border:1px solid var(--line-soft);margin-bottom:16px;}
+  .cert-modal-actions{
+    display:flex;gap:12px;flex-wrap:wrap;
+    padding-top:20px;border-top:1px solid var(--line);
+  }
+
+  /* ============ FOOTER ============ */
+  footer{padding:60px 0;background:var(--bg);border-top:1px solid var(--line); text-align:center;}
+  .footer-links{display:flex;justify-content:center;gap:24px;margin:24px 0;}
+  .footer-links a{font-family:var(--mono);font-size:12px;text-transform:uppercase;color:var(--muted);}
+  .footer-note{font-size:12px;color:var(--muted-2);}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(20px);transition:all .8s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1024px){
+    header{padding:16px 20px;}
+    .primary-nav{display:none;}
+    .menu-toggle{display:flex;}
+    .hero-inner{grid-template-columns:1fr;text-align:center;gap:40px;}
+    .hero-portrait{max-width:400px;margin:0 auto;order:-1;}
+    .hero-actions{justify-content:center;}
+    .about-grid{grid-template-columns:1fr;gap:30px;}
+    .about-label{position:static;}
+    .price-grid{grid-template-columns:1fr;}
+    .carousel-track{padding-left:20px;padding-right:20px;}
+    .sites .section-head{flex-direction:column;align-items:flex-start;gap:16px;}
+    .cert-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#top" class="brand"><img decoding="async" fetchpriority="high" src="logo_julia_premium.png" alt="Júlia Ágata de Assis"></a>
+  <nav class="primary-nav">
+    <ul>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#sites">Sites</a></li>
+      <li><a href="#designs">Designs</a></li>
+      <li><a href="#certificados">Certificados</a></li>
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#precos">Investimento</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a class="nav-cta" href="https://wa.me/5534988086470" target="_blank">WhatsApp</a>
+  </nav>
+  <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+</header>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <ul>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#sites">Sites</a></li>
+    <li><a href="#designs">Designs</a></li>
+    <li><a href="#certificados">Certificados</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#precos">Investimento</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <a class="btn btn-solid" href="https://wa.me/5534988086470" target="_blank">WhatsApp</a>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="hero-text reveal">
+          <span class="eyebrow">Web Designer · Desenvolvedora de Sites</span>
+          <h1>Presença digital com <em>padrão premium.</em></h1>
+          <p class="lead">Criação de sites profissionais e modernos para elevar a autoridade da sua marca no ambiente digital.</p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="https://wa.me/5534988086470" target="_blank">Iniciar projeto</a>
+            <a class="btn btn-line" href="#sites">Portfólio</a>
+          </div>
+        </div>
+        <div class="hero-portrait reveal">
+          <div class="frame"></div>
+          <div class="img-box"><img decoding="async" fetchpriority="high" src="images/portrait.jpeg" alt="Júlia"></div>
+          <div class="tag"><span class="dot"></span>Araxá / MG — Atendimento remoto</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about" id="sobre">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-label reveal"><span class="eyebrow">01 — Sobre</span><h2>Minha história</h2></div>
+        <div class="about-copy reveal">
+          <p>Especializada em sites profissionais que unem design sofisticado e performance.</p>
+          <p>Foco total em transformar visitantes em clientes através de uma presença digital de alto nível.</p>
+          <div class="signature">Júlia Ágata de Assis</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sites" id="sites">
+    <div class="wrap"><div class="section-head reveal"><div><span class="eyebrow">02 — Portfólio</span><h2>Sites</h2></div><span id="sitesCount" style="font-family:var(--mono); font-size:12px;">01 / 21</span></div></div>
+    <div class="carousel-container">
+      <div class="carousel-viewport" id="sitesViewport"><div class="carousel-track" id="sitesTrack"></div></div>
+      <div class="carousel-arrow prev" id="sitesPrev"></div>
+      <div class="carousel-arrow next" id="sitesNext"></div>
+    </div>
+  </section>
+
+  <section class="designs" id="designs">
+    <div class="wrap"><div class="section-head reveal"><span class="eyebrow">03 — Criativos</span><h2>Designs</h2></div></div>
+    <div class="carousel-container">
+      <div class="carousel-viewport" id="designsViewport"><div class="carousel-track" id="designsTrack"></div></div>
+      <div class="carousel-arrow prev" id="designsPrev"></div>
+      <div class="carousel-arrow next" id="designsNext"></div>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICADOS ===== -->
+  <section class="certificates" id="certificados">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">05 — Formação</span>
+          <h2>Certificados</h2>
+        </div>
+      </div>
+      <div class="cert-grid">
+
+        <!-- Card: Desenvolvimento Web com Implantação de Projeto -->
+        <div class="cert-card reveal" onclick="openCertModal()">
+          <div class="cert-badge">680 h</div>
+          <div class="cert-thumb">
+            <img src="images/certificado-proz-dev-web.png" loading="lazy" decoding="async" alt="Certificado Desenvolvimento Web com Implantação de Projeto — Proz">
+            <div class="cert-overlay"><span>Ver certificado</span></div>
+          </div>
+          <div class="cert-body">
+            <p class="cert-issuer">Proz Educação · ArcelorMittal · CBMM</p>
+            <h4>Desenvolvimento Web com Implantação de Projeto</h4>
+            <div class="cert-meta">
+              <div class="cert-meta-item">
+                <span class="label">Emissão</span>
+                <span class="value">01/07/2026</span>
+              </div>
+              <div class="cert-meta-item">
+                <span class="label">Duração</span>
+                <span class="value">680 horas</span>
+              </div>
+              <div class="cert-meta-item">
+                <span class="label">Período</span>
+                <span class="value">Out 2025 – Jun 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MODAL CERTIFICADO ===== -->
+  <div class="cert-modal-overlay" id="certModalOverlay" onclick="closeCertModalOnBg(event)">
+    <div class="cert-modal" id="certModal">
+      <div class="cert-modal-header">
+        <h3>Certificado de Conclusão</h3>
+        <button class="cert-modal-close" onclick="closeCertModal()" aria-label="Fechar">&#215;</button>
+      </div>
+      <div class="cert-modal-body">
+        <img class="cert-modal-img" src="images/certificado-proz-dev-web.png" alt="Certificado — página 1">
+        <img class="cert-modal-img" src="images/certificado-proz-dev-web-p2.png" alt="Certificado — página 2">
+        <div class="cert-modal-actions">
+          <a class="btn btn-solid" href="certificado-desenvolvimento-web.pdf" download="Certificado_Julia_Assis_Desenvolvimento_Web.pdf">Baixar PDF</a>
+          <a class="btn btn-line" href="certificado-desenvolvimento-web.pdf" target="_blank">Abrir em nova aba</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="pricing" id="precos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">04 — Investimento</span>
+        <h2>Tabela de preços</h2>
+      </div>
+      <div class="price-grid reveal">
+        <div class="price-card">
+          <h3>Web <em>Designer</em></h3>
+          <div class="price-row"><div class="row-head"><span>Landing Page</span><span>R$ 890,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Site Institucional</span><span>R$ 1.390,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Site Empresarial</span><span>R$ 1.990,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Loja Virtual</span><span>R$ 2.790,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>One Page</span><span>R$ 750,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Manutenção de Site</span><span>R$ 150,00 / mês</span></div></div>
+          <div class="price-row"><div class="row-head"><span>SEO Básico</span><span>R$ 320,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Designer <em>Gráfico</em></h3>
+          <div class="price-row"><div class="row-head"><span>Logotipo Exclusivo</span><span>R$ 280,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Identidade Visual</span><span>R$ 620,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Cartão de Visita</span><span>R$ 70,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Banner Digital</span><span>R$ 70,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Flyer / Panfleto</span><span>R$ 90,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Folder</span><span>R$ 130,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Card para Redes Sociais</span><span>R$ 25,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Pack com 10 Artes</span><span>R$ 170,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Currículo Profissional</span><span>R$ 80,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Apresentação Profissional</span><span>R$ 280,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Marketing <em>Digital</em></h3>
+          <div class="price-row"><div class="row-head"><span>Gestão de Redes Sociais</span><span>R$ 500,00 / mês</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Planejamento de Conteúdo</span><span>R$ 200,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Consultoria Digital</span><span>R$ 150,00 / hora</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Configuração Meta Ads</span><span>R$ 280,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Configuração Google Ads</span><span>R$ 350,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Estratégia de Marketing</span><span>R$ 300,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>IA <em>& Automação</em></h3>
+          <div class="price-row"><div class="row-head"><span>Criação de Imagens IA</span><span>R$ 90,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Planilhas Automatizadas</span><span>R$ 220,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Dashboard (BI)</span><span>R$ 420,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Treinamento em IA</span><span>R$ 220,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Consultoria em IA</span><span>R$ 180,00 / hora</span></div></div>
+          <div class="price-row"><div class="row-head"><span>Chatbot para WhatsApp</span><span>R$ 450,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Seguidores <em>Mundiais</em></h3>
+          <div class="price-row"><div class="row-head"><span>200</span><span>R$ 9,50</span></div></div>
+          <div class="price-row"><div class="row-head"><span>500</span><span>R$ 16,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>700</span><span>R$ 19,50</span></div></div>
+          <div class="price-row"><div class="row-head"><span>1.000</span><span>R$ 29,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>2.000</span><span>R$ 55,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>3.000</span><span>R$ 65,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>4.000</span><span>R$ 75,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>5.000</span><span>R$ 89,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>10.000</span><span>R$ 163,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Seguidores <em>Brasileiros</em></h3>
+          <div class="price-row"><div class="row-head"><span>100</span><span>R$ 9,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>200</span><span>R$ 15,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>500</span><span>R$ 32,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>1.000</span><span>R$ 64,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Curtidas <em>Brasileiras</em></h3>
+          <div class="price-row"><div class="row-head"><span>500</span><span>R$ 15,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>1.000</span><span>R$ 26,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Curtidas <em>Mundiais</em></h3>
+          <div class="price-row"><div class="row-head"><span>1.000</span><span>R$ 13,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>10.000</span><span>R$ 38,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>20.000</span><span>R$ 53,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>50.000</span><span>R$ 78,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Visualizações <em>Reels</em></h3>
+          <div class="price-row"><div class="row-head"><span>2.000</span><span>R$ 8,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>5.000</span><span>R$ 13,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>10.000</span><span>R$ 25,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>20.000</span><span>R$ 35,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>50.000</span><span>R$ 55,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Alcance de <em>Métricas</em></h3>
+          <div class="price-row"><div class="row-head"><span>2.000</span><span>R$ 10,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>5.000</span><span>R$ 20,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>10.000</span><span>R$ 30,00</span></div></div>
+        </div>
+        <div class="price-card">
+          <h3>Comentários <em>Brasileiros</em></h3>
+          <div class="price-row"><div class="row-head"><span>30</span><span>R$ 27,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>50</span><span>R$ 47,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>70</span><span>R$ 60,00</span></div></div>
+          <div class="price-row"><div class="row-head"><span>100</span><span>R$ 75,00</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-links">
+      <a href="#sobre">Sobre</a><a href="#sites">Sites</a><a href="#designs">Designs</a><a href="#certificados">Certificados</a><a href="https://wa.me/5534988086470">WhatsApp</a>
+    </div>
+    <div class="footer-note">© 2024 Júlia Ágata de Assis. Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<script>
+const sites = [
+  ["Maison Belle Studio","Moda","https://juliaassis238.github.io/maison-belle-studio/","images/IMG_3257.JPG"],
+  ["Vita Care Institute","Saúde","https://juliaassis238.github.io/vita-care-institute/","images/IMG_3255.JPG"],
+  ["Prime Athletics Club","Fitness","https://juliaassis238.github.io/prime-athletics-club/","images/IMG_3254.JPG"],
+  ["Urban Axis Architecture","Arquitetura","https://juliaassis238.github.io/urban-axis-architecture/","images/IMG_3253.JPG"],
+  ["Sweet Lab Patisserie","Gastronomia","https://juliaassis238.github.io/sweet-lab-patisserie/","images/IMG_3256.JPG"],
+  ["Movere","Saúde","https://site-ofc.github.io/movere/","images/capa-movere-fisioterapia.png"],
+  ["NovaCore Systems","Tecnologia","https://juliaassis238.github.io/novacore-systems/","images/IMG_3248.JPG"],
+  ["Velocity Auto Garage","Automotivo","https://juliaassis238.github.io/velocity-auto-garage/","images/IMG_3249.JPG"],
+  ["Aurora Maison","Moda","https://juliaassis238.github.io/aurora-maison/","images/IMG_3250.JPG"],
+  ["Royal Imperial Resort","Hotelaria","https://juliaassis238.github.io/royal-imperial-resort/","images/IMG_3251.JPG"],
+  ["Horizon Legal Society","Jurídico","https://juliaassis238.github.io/horizon-legal-society/","images/IMG_3252.JPG"],
+  ["Dentista Premium","Odontologia","https://site-ofc.github.io/portfolio-dentista/","images/capa-dentista-premium.png"],
+  ["Imobiliária Luxo","Imóveis","https://site-ofc.github.io/dr-kennedy/","images/capa-imobiliaria-luxo.png"],
+  ["Corretor Elite","Imóveis","https://site-ofc.github.io/portfolio-corretor/","images/capa-corretor-elite.png"],
+  ["Clínica Médica Moderna","Saúde","https://site-ofc.github.io/clinica-medica/","images/capa-clinica-medica.png"],
+  ["Médico Especialista","Saúde","https://site-ofc.github.io/medico-especialista/","images/capa-medico-especialista.png"],
+  ["Advogado Exclusivo","Jurídico","https://site-ofc.github.io/portfolio-advogado/","images/capa-advogado-exclusivo.png"],
+  ["BC Express","Logística","https://site-ofc.github.io/bc-express/","images/capa-bc-express.png"],
+  ["Tatiane Melchert","Portfólio","https://site-ofc.github.io/tatianemelchert/","images/capa-tatiane-melchert.png"],
+  ["Dr. Kennedy","Saúde","https://site-ofc.github.io/dr-kennedy/","images/capa-dr-kennedy.png"],
+  ["Gusman Luxo","Odontologia","https://site-ofc.github.io/andregusman24h/","images/capa-gusman-luxo.png"],
+  ["Dentista 24h Sorocaba","Odontologia","https://site-ofc.github.io/dentista-24h/","images/capa-dentista-24h.png"]
+];
+
+const gallery = [
+  ["images/Designs.PNG"],
+  ["images/Maximalismo.PNG"],
+  ["images/70da473c-1b17-4e80-8a6b-6d9524937974.PNG"],
+  ["images/GOLDEN HOUR.PNG"],
+  ["images/Blue Illustrative Technology Innovation Poster (Post para Instagram (45)).PNG"],
+  ["images/C263945D-DAEC-4F0D-92BB-EAF6C45A220C.PNG"],
+  ["images/68C04A46-1314-4CD6-A88F-2A978EE240C5.PNG"],
+  ["images/b2b53c50-99a6-4847-b830-575ade29edfb.PNG"],
+  ["images/79d095f8-616d-49d7-b65d-cc1f18a29cc9.PNG"],
+  ["images/bee6018d-8c8f-4474-bf8e-9663c8b05217.PNG"],
+  ["images/8ae61bd2-c1fd-4fc3-8dbf-7ebc7dfe886c.PNG"],
+  ["images/5aba3c77-b49e-463c-a5cb-ff43bb6a9a1c.PNG"],
+  ["images/Designs 2.PNG"],
+  ["images/Feliz.PNG"],
+  ["images/Personalizados.PNG"],
+  ["images/IMG_3205.JPG"],
+  ["images/IMG_3206.JPG"],
+  ["images/arte_neutra_dentistas_24hs.jpg"],
+  ["images/Edições personalizadas.jpg"],
+  ["images/Crio ensaios fotográficos e edições personalizadas para você !.jpg"],
+  ["images/Black and Blue Futuristic Modern Technology Pitch Deck Presentation (Post para Instagram (45)).zip - Português (Brasil).PNG"],
+  ["images/Blue Futuristic and Modern Artificial Intelligence Marketing Webinar Instagram Post.zip - Português (Brasil).PNG"]
+];
+
+function render() {
+  const st = document.getElementById('sitesTrack'), dt = document.getElementById('designsTrack');
+  sites.forEach(s => {
+    const c = document.createElement('div'); c.className = 'site-card';
+    c.innerHTML = `<a href="${s[2]}" target="_blank" class="site-card-link"></a><div class="site-thumb"><img src="${s[3]}" loading="lazy" decoding="async" fetchpriority="high"></div><div class="site-info"><h4>${s[0]}</h4><a class="visit" href="${s[2]}" target="_blank">Visitar</a></div>`;
+    st.appendChild(c);
+  });
+  gallery.forEach(g => {
+    const c = document.createElement('div'); c.className = 'design-card';
+    c.innerHTML = `<img src="${g[0]}" loading="lazy" decoding="async" fetchpriority="low">`;
+    dt.appendChild(c);
+  });
+}
+
+const mt = document.getElementById('menuToggle'), md = document.getElementById('mobileDrawer');
+mt.onclick = () => { mt.classList.toggle('open'); md.classList.toggle('open'); };
+md.querySelectorAll('a').forEach(a => a.onclick = () => { mt.classList.remove('open'); md.classList.remove('open'); });
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+window.onload = () => {
+  render();
+  const v = document.getElementById('sitesViewport'), c = document.getElementById('sitesCount');
+  v.onscroll = () => {
+    const idx = Math.round(v.scrollLeft / (v.offsetWidth * 0.8)) + 1;
+    c.innerText = `${String(Math.min(idx, sites.length)).padStart(2,'0')} / ${String(sites.length).padStart(2,'0')}`;
+  };
+  
+  // Carousel arrow navigation
+  const setupCarouselArrows = (viewportId, prevArrowId, nextArrowId) => {
+    const viewport = document.getElementById(viewportId);
+    const prevArrow = document.getElementById(prevArrowId);
+    const nextArrow = document.getElementById(nextArrowId);
+    if(!viewport || !prevArrow || !nextArrow) return;
+    
+    const cardWidth = viewport.querySelector('.site-card, .design-card')?.offsetWidth || 300;
+    const gap = 20;
+    const scrollAmount = cardWidth + gap;
+    
+    prevArrow.onclick = () => { viewport.scrollBy({ left: -scrollAmount, behavior: 'smooth' }); };
+    nextArrow.onclick = () => { viewport.scrollBy({ left: scrollAmount, behavior: 'smooth' }); };
+  };
+  
+  setupCarouselArrows('sitesViewport', 'sitesPrev', 'sitesNext');
+  setupCarouselArrows('designsViewport', 'designsPrev', 'designsNext');
+  
+  document.querySelectorAll('img').forEach(img => {
+    if(img.complete) img.classList.add('loaded');
+    else img.addEventListener('load', () => img.classList.add('loaded'));
+  });
+};
+
+window.onscroll = () => {
+  document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 50);
+};
+
+function openCertModal() {
+  const overlay = document.getElementById('certModalOverlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCertModal() {
+  const overlay = document.getElementById('certModalOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeCertModalOnBg(e) {
+  if (e.target === document.getElementById('certModalOverlay')) {
+    closeCertModal();
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeCertModal();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const images = document.querySelectorAll('img');
+  images.forEach(img => {
+    if (img.complete) {
+      img.classList.add('loaded');
+    } else {
+      img.addEventListener('load', () => img.classList.add('loaded'));
+    }
+  });
+});
+</script>
+</body>
+</html>
