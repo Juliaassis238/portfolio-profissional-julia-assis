@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preload" as="image" href="images/portrait.jpeg">
 <title>Júlia Ágata de Assis — Web Designer & Desenvolvedora de Sites</title>
 <meta name="description" content="Criação de sites profissionais, modernos e responsivos. Web Design, Desenvolvimento e Marketing Digital.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -404,7 +405,7 @@
     <div class="wrap">
       <div class="hero-inner">
         <div class="hero-desktop">
-          <div class="hero-desktop-media"><img src="images/portrait.jpeg" alt="Júlia Ágata de Assis"></div>
+          <div class="hero-desktop-media"><img src="images/portrait.jpeg" decoding="async" fetchpriority="high" alt="Júlia Ágata de Assis"></div>
           <div class="hero-desktop-copy">
             <span class="eyebrow">Web Designer · Desenvolvedora de Sites</span>
             <h1>Presença digital com <em>padrão premium.</em></h1>
@@ -503,8 +504,8 @@
         <button class="cert-modal-close" onclick="closeCertModal()" aria-label="Fechar">&#215;</button>
       </div>
       <div class="cert-modal-body">
-        <img class="cert-modal-img" src="images/certificado-proz-dev-web.png" alt="Certificado — página 1">
-        <img class="cert-modal-img" src="images/certificado-proz-dev-web-p2.png" alt="Certificado — página 2">
+        <img class="cert-modal-img" src="images/certificado-proz-dev-web.png" loading="lazy" decoding="async" alt="Certificado — página 1">
+        <img class="cert-modal-img" src="images/certificado-proz-dev-web-p2.png" loading="lazy" decoding="async" alt="Certificado — página 2">
         <div class="cert-modal-actions">
           <a class="btn btn-solid" href="certificado-desenvolvimento-web.pdf" download="Certificado_Julia_Assis_Desenvolvimento_Web.pdf">Baixar PDF</a>
           <a class="btn btn-line" href="certificado-desenvolvimento-web.pdf" target="_blank">Abrir em nova aba</a>
