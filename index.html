@@ -126,10 +126,20 @@
   .btn-solid{background:var(--green);color:#fff;}
   .btn-line{border:1px solid var(--ink);}
   .hero-contact .btn-solid{
-    background:#fff;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px 32px;
+    border-radius:999px;
+    background:rgba(255,255,255,.96);
     color:var(--green);
-    border:1px solid #fff;
-    box-shadow:0 8px 22px rgba(0,0,0,.22);
+    border:1px solid rgba(255,255,255,.98);
+    letter-spacing:.14em;
+    box-shadow:0 10px 28px rgba(0,0,0,.22);
+  }
+  .hero-contact .btn-solid:hover{
+    transform:translateY(-3px);
+    box-shadow:0 14px 34px rgba(0,0,0,.28);
   }
   .hero-portrait{display:none;}
 
@@ -297,7 +307,9 @@
 
   /* ============ RESPONSIVE ============ */
   @media (min-width:1025px){
-    .hero{background-position:center 12%;}
+    .hero{background-position:center 18%;}
+    .hero-contact{left:auto;right:0;bottom:56px;}
+    .hero-contact .btn-solid{min-width:210px;font-size:13px;}
   }
   @media (max-width:1024px){
     header{padding:16px 20px;}
@@ -317,6 +329,7 @@
   @media (max-width:600px){
     .hero{background-position:54% 10%;}
     .hero-contact{left:50%;bottom:28px;transform:translateX(-50%);white-space:nowrap;}
+    .hero-contact .btn-solid{padding:14px 26px;font-size:11px;}
   }
 </style>
 </head>
