@@ -116,6 +116,7 @@
     background:#17231d url('images/portrait.jpeg') center 12% / cover no-repeat;
   }
   .hero-inner{position:relative;min-height:100svh;}
+  .hero-desktop{display:none;}
   .hero-contact{
     position:absolute;
     left:24px;
@@ -307,9 +308,35 @@
 
   /* ============ RESPONSIVE ============ */
   @media (min-width:1025px){
-    .hero{background-position:center 18%;}
-    .hero-contact{left:auto;right:0;bottom:56px;}
-    .hero-contact .btn-solid{min-width:210px;font-size:13px;}
+    .hero{
+      min-height:100svh;
+      background:var(--bg);
+    }
+    .hero-inner{min-height:100svh;display:block;}
+    .hero-contact{display:none;}
+    .hero-desktop{
+      min-height:100svh;
+      display:grid;
+      grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+      align-items:center;
+      gap:clamp(48px,7vw,110px);
+      padding:clamp(96px,11vh,140px) 0 64px;
+    }
+    .hero-desktop-media{
+      width:min(100%,720px);
+      aspect-ratio:1;
+      justify-self:center;
+      overflow:hidden;
+      background:var(--bg-alt);
+    }
+    .hero-desktop-media img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;}
+    .hero-desktop-copy{max-width:520px;}
+    .hero-desktop-copy .eyebrow{display:block;margin-bottom:22px;}
+    .hero-desktop-copy h1{font-size:clamp(48px,5.4vw,78px);line-height:1.03;margin:0 0 26px;}
+    .hero-desktop-copy h1 em{font-style:italic;font-weight:400;color:var(--green);}
+    .hero-desktop-copy .lead{font-size:19px;color:var(--muted);max-width:500px;margin-bottom:34px;}
+    .hero-desktop-actions{display:flex;align-items:center;gap:16px;}
+    .hero-desktop-actions .btn-solid{min-width:210px;font-size:13px;}
   }
   @media (max-width:1024px){
     header{padding:16px 20px;}
@@ -369,6 +396,18 @@
   <section class="hero" aria-label="Capa de apresentação de Júlia Ágata de Assis">
     <div class="wrap">
       <div class="hero-inner">
+        <div class="hero-desktop">
+          <div class="hero-desktop-media"><img src="images/portrait.jpeg" alt="Júlia Ágata de Assis"></div>
+          <div class="hero-desktop-copy">
+            <span class="eyebrow">Web Designer · Desenvolvedora de Sites</span>
+            <h1>Presença digital com <em>padrão premium.</em></h1>
+            <p class="lead">Criação de sites profissionais e modernos para elevar a autoridade da sua marca no ambiente digital.</p>
+            <div class="hero-desktop-actions">
+              <a class="btn btn-solid" href="https://wa.me/5534988086470" target="_blank">Entrar em contato</a>
+              <a class="btn btn-line" href="#sites">Ver portfólio</a>
+            </div>
+          </div>
+        </div>
         <div class="hero-contact">
           <a class="btn btn-solid" href="https://wa.me/5534988086470" target="_blank">Entrar em contato</a>
         </div>
